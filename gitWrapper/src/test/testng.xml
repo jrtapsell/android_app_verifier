@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Project">
+
+    <test name="Process">
+        <classes>
+            <class name="uk.co.jrtapsell.gitWrapper.TestProcessIO"/>
+            <class name="uk.co.jrtapsell.gitWrapper.TestGit"/>
+        </classes>
+    </test>
+
+</suite>

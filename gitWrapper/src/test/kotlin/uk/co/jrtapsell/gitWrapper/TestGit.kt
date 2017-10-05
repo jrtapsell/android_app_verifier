@@ -11,11 +11,11 @@ class TestGit {
     @DataProvider(name = "repos")
     fun listRepos(): Array<Array<String>> = arrayOf(
             "/home/james/FYP/demoRepo",
-            "/home/james/FYP/android_app_verifier"
+            PROJECT_DIR
     ).map { arrayOf(it) }.toTypedArray()
 
     @Test(dataProvider = "repos")
-    fun makeGit(path: String) {
+    fun `Constructs a repo for a known path `(path: String) {
         var repository = Git(path)
     }
 }
