@@ -1,5 +1,38 @@
 package uk.co.jrtapsell.gitWrapper
 
-class Git(val directory: String) {
+import uk.co.jrtapsell.gitWrapper.data.Commit
+import uk.co.jrtapsell.gitWrapper.processIO.Line
+import uk.co.jrtapsell.gitWrapper.processIO.OutputSequence
+import uk.co.jrtapsell.gitWrapper.processIO.run
 
+class Git(val directory: String) {
+    fun listCommits(): List<Commit> {
+        val process = run(
+                true,
+                directory,
+                "git", "log", "--all", "--pretty=%s")
+
+        return getCommits(process)
+    }
+
+    private fun getCommits(process: OutputSequence): List<Commit> {
+        val back = process.use {
+            it.map {
+                if (it.stream == Line.IOStream.ERR) it.text else Commit(it.text)
+            }
+        }.toList()
+
+        val errLines = back.filter { it is String }.map { it as String }
+
+        if (errLines.isNotEmpty()) {
+            val message = errLines.joinToString("\n")
+            throw GitException("Git output error message\n$message")
+        }
+
+        if (process.exitCode != 0) {
+            throw GitException("Git returned ${process.exitCode}")
+        }
+
+        return back.map { it as Commit }
+    }
 }

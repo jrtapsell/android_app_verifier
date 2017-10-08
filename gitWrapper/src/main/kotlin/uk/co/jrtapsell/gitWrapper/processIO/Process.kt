@@ -1,7 +1,7 @@
 package uk.co.jrtapsell.gitWrapper.processIO
 
 import java.io.File
-import java.util.concurrent.LinkedBlockingDeque
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import java.util.Scanner
 import kotlin.concurrent.thread
@@ -14,36 +14,6 @@ data class Line(val text: String, val stream: IOStream) {
         /** System.out */ OUT,
         /** System.err */ ERR,
         /** Value to say that stream is done. */ STOP }
-}
-
-/** Iterator that can keep having stuff added to it until it is closed. */
-class TerminatedSource<T>(private val terminator: T): Iterator<T> {
-    private val backing = LinkedBlockingDeque<T>()
-
-    private var _last: T? = null
-    private val last: T get() {
-            if (_last == null) {
-                _last = backing.take()!!
-            }
-            return _last!!
-    }
-
-    /** Seals the source, saying no new items will be added */
-    fun seal() = push(terminator)
-    /** Pushes the item into the source. */
-    fun push(line: T) = backing.put(line)
-
-    /** Gets the next value from the source. */
-    override fun next(): T {
-        val line = last
-        _last = null
-        return line
-    }
-
-    /** Checks if the source has a next item. */
-    override fun hasNext(): Boolean {
-        return last == terminator
-    }
 }
 
 /**
@@ -65,6 +35,8 @@ class OutputSequence(
             }
         }
         exitCode = process.waitFor()
+        out.join()
+        err.join()
     }
 
     /**
@@ -74,17 +46,25 @@ class OutputSequence(
     var exitCode: Int? = null
 
     private val hashCode = System.identityHashCode(process)
-    private val err = thread(name = "stdErr for P$hashCode", block = {
-        Scanner(process.errorStream).forEach {
-            store.push(Line(it, Line.IOStream.ERR))
-        }
-    })
 
-    private val out = thread(name = "stdOut for P$hashCode", block = {
-        Scanner(process.inputStream).forEach {
-            store.push(Line(it, Line.IOStream.OUT))
-        }
-    })
+    private fun makeThread(name: String, stream: InputStream, type: Line.IOStream): Thread {
+       return thread(name = name, block = {
+           val scanner = Scanner(stream)
+           while (scanner.hasNextLine()) {
+               store.push(Line(scanner.nextLine(), type))
+           }
+       })
+    }
+
+    private val err = makeThread(
+            "stdErr for P$hashCode",
+            process.errorStream,
+            Line.IOStream.ERR)
+
+    private val out = makeThread(
+            "stdOut for P$hashCode",
+            process.inputStream,
+            Line.IOStream.OUT)
 
     init {
         process.onExit().thenAccept {

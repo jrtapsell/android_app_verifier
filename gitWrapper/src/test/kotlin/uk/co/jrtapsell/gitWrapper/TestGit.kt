@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.gitWrapper
 
+import org.testng.Assert
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
@@ -17,5 +18,12 @@ class TestGit {
     @Test(dataProvider = "repos")
     fun `Constructs a repo for a known path `(path: String) {
         var repository = Git(path)
+    }
+
+    @Test(dataProvider = "repos")
+    fun `Lists commits for the given repo `(path: String) {
+        val repository = Git(path)
+        val commits = repository.listCommits()
+        Assert.assertNotEquals(commits.size, 0)
     }
 }

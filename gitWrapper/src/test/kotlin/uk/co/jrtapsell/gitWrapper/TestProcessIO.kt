@@ -2,6 +2,7 @@ package uk.co.jrtapsell.gitWrapper
 
 import org.testng.Assert
 import org.testng.annotations.Test
+import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
 
 /** Using https://www.tengio.com/blog/more-readable-tests-with-kotlin/ */
@@ -9,12 +10,10 @@ class TestProcessIO {
 
     @Test
     fun `Runs ls as a basic process test`() {
+        val lines = mutableListOf<Line>()
         val run = run(true, "/", "ls")
-        run.use {
-            it.forEach {
-                println(it)
-            }
-        }
+        run.use { it.forEach { lines.add(it) } }
+        Assert.assertNotEquals(lines.size, 0, "No items")
     }
 
     @Test
