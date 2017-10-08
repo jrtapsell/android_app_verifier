@@ -4,8 +4,7 @@ import java.io.File
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import java.util.Scanner
-import kotlin.concurrent.thread
-
+import extensions._Thread.thread
 
 /** An output line/ */
 data class Line(val text: String, val stream: IOStream) {
@@ -47,27 +46,30 @@ class OutputSequence(
 
     private val hashCode = System.identityHashCode(process)
 
+    private val group = ThreadGroup("P$hashCode")
+
     private fun makeThread(name: String, stream: InputStream, type: Line.IOStream): Thread {
-       return thread(name = name, block = {
-           val scanner = Scanner(stream)
-           while (scanner.hasNextLine()) {
-               store.push(Line(scanner.nextLine(), type))
-           }
-       })
+        return thread(group, name) {
+            val scanner = Scanner(stream)
+            while (scanner.hasNextLine()) {
+                store.push(Line(scanner.nextLine(), type))
+            }
+        }
     }
 
     private val err = makeThread(
-            "stdErr for P$hashCode",
+            "P$hashCode.stdErr",
             process.errorStream,
             Line.IOStream.ERR)
 
     private val out = makeThread(
-            "stdOut for P$hashCode",
+            "P$hashCode.stdOut",
             process.inputStream,
             Line.IOStream.OUT)
 
     init {
-        process.onExit().thenAccept {
+        thread(group, "P$hashCode.Exit") {
+            process.waitFor()
             out.join()
             err.join()
             store.seal()

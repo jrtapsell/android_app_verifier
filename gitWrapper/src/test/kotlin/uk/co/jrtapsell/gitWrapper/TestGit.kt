@@ -17,7 +17,7 @@ class TestGit {
 
     @Test(dataProvider = "repos")
     fun `Constructs a repo for a known path `(path: String) {
-        var repository = Git(path)
+        Git(path)
     }
 
     @Test(dataProvider = "repos")

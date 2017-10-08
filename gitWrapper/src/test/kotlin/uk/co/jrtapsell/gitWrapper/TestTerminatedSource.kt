@@ -15,4 +15,9 @@ class TestTerminatedSource {
         source.seal()
         Assert.assertFalse(source.hasNext())
     }
+
+    @Test
+    fun `Tests in a multithreaded environment`() {
+
+    }
 }
