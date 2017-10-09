@@ -36,7 +36,7 @@ class TestProcessIO {
     fun `Checks test script exit code is returned`() {
         val pro = run(
                 true,
-                PROJECT_DIR +"/gitWrapper/scripts/",
+                PROJECT_DIR +"/scripts/",
                 "bash",
                 "exit.sh",
                 "1")
