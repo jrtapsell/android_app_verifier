@@ -8,18 +8,23 @@ import java.util.*
 class Hash(private val data:ByteArray) {
     override fun toString() = value()
 
-    fun Byte.unsigned(): Int = this.toInt() and 0xFF
-    fun Byte.toHex(length: Int) = this.unsigned().toString(16).padStart(length, '0')
+    private fun Byte.unsigned(): Int = this.toInt() and 0xFF
+    private fun Byte.toHex(length: Int) = this.unsigned().toString(16).padStart(length, '0')
 
-    private fun value(): String {
+    fun value(): String {
         return data.joinToString("") { it.toHex(2) }
+    }
+
+    fun last(length: Int): String {
+        return data.takeLast((length + 1) / 2)
+                .joinToString("") {it.toHex(2)}
+                .takeLast(length)
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
 
-        other as Hash
+        if (other !is Hash) return false
 
         if (!Arrays.equals(data, other.data)) return false
 

@@ -30,6 +30,7 @@ class OutputSequence(
             process.destroy()
             process.waitFor(1, TimeUnit.SECONDS)
             if (process.isAlive) {
+                System.err.println("Having to kill process hard, something went wrong")
                 process.destroyForcibly()
             }
         }

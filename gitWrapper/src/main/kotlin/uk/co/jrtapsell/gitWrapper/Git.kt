@@ -3,14 +3,24 @@ package uk.co.jrtapsell.gitWrapper
 import uk.co.jrtapsell.gitWrapper.data.Commit
 import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
+import java.io.IOException
 
-class Git(val directory: String) {
+class Git(private val directory: String) {
     fun listCommits(): List<Commit> {
-        val process = run(
-                true,
-                directory,
-                "git", "log", "--all", "--pretty=${Commit.PRETTY_STRING}")
+        val process = try {
+            run(
+                    true,
+                    directory,
+                    "git", "log", "--all", "--pretty=${Commit.PRETTY_STRING}")
 
+        } catch (ex: IOException) {
+            val message = ex.message
+            throw GitException("Couldn't list commits, " + when {
+                message == null -> "Unknown error"
+                message.contains("Not a directory") -> "$directory is not a directory"
+                else -> "Cannot run git in $directory, unknown error"
+            })
+        }
         val back = process.use {
             it.map {
                 if (it.stream == Line.IOStream.ERR) it.text else Commit.convert(it.text)
@@ -18,11 +28,14 @@ class Git(val directory: String) {
         }.toList()
         val errLines = back.filter { it is String }.map { it as String }
         if (errLines.isNotEmpty()) {
-            val message = errLines.joinToString("\n")
-            throw GitException("Git output error message\n$message")
+            val message = errLines.joinToString("\n").trim()
+            if (message == "fatal: Not a git repository (or any of the parent directories): .git") {
+                throw GitException("Couldn't list commits, $directory is not a git repo")
+            }
+            throw GitException("Couldn't list commits, git output error message:\n$message")
         }
         if (process.exitCode != 0) {
-            throw GitException("Git returned ${process.exitCode}")
+            throw GitException("Couldn't list commits, git returned ${process.exitCode}")
         }
         return back.map { it as Commit }
     }

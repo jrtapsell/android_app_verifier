@@ -28,4 +28,31 @@ class TestGit {
             println(commit)
         }
     }
+
+    @Test
+    fun `Validates known facts about this repo`() {
+        val repository = Git("./")
+        val commits = repository.listCommits()
+        val genesis = commits.last()
+        Assert.assertEquals(genesis.commitHash.value(), "0b764cd867bff6e471cca0ab009d4874c2b85819")
+        Assert.assertEquals(genesis.commitHash.last(6), "b85819")
+    }
+
+    @Test(
+            expectedExceptions = arrayOf(GitException::class),
+            expectedExceptionsMessageRegExp = "Couldn't list commits, /dev/null is not a directory"
+    )
+    fun `Tries for a file that is not a repo`() {
+        val repo = Git("/dev/null")
+        repo.listCommits()
+    }
+
+    @Test(
+            expectedExceptions = arrayOf(GitException::class),
+            expectedExceptionsMessageRegExp = "Couldn't list commits, /tmp is not a git repo"
+    )
+    fun `Tries for a directory that is not a repo`() {
+        val repo = Git("/tmp")
+        repo.listCommits()
+    }
 }
