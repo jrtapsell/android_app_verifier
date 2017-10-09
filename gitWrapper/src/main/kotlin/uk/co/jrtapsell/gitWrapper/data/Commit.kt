@@ -28,14 +28,17 @@ data class Commit(
             status: String,
             gpgSigner: String,
             gpgKey: String): Commit {
-            val author: Identity
-            val committer: Identity
+            var author = Identity(authorName, authorEmail, null)
+            var committer = Identity(committerName, committerEmail, null)
 
             if (!gpgSigner.isBlank()) {
-
-            } else {
-                author = Identity(authorName, authorEmail, null)
-                committer = Identity(committerName, committerEmail, null)
+                val signIdent = Identity.fromGpgString(gpgSigner)
+                if (author.email == signIdent.email) {
+                    author = SignedIdentity(author, signIdent.comment!!, status, gpgKey)
+                }
+                if (committer.email == signIdent.email) {
+                    committer = SignedIdentity(committer, signIdent.comment!!, status, gpgKey)
+                }
             }
             return Commit(
                     commitHash,

@@ -5,13 +5,24 @@ open class Identity(
     val email: String,
     val comment: String?) {
     override fun toString() = "$realName ($comment) <$email>"
+
+    companion object {
+        private val GPG_REGEX = Regex("""(?<real>[^(]+?) *\((?<comment>[^)]+)\) *<(?<email>[^>]+)>""")
+        fun fromGpgString(gpgString: String): Identity {
+            val v = GPG_REGEX.matchEntire(gpgString)!!
+            val real = v.groups["real"]!!.value
+            val comment = v.groups["comment"]!!.value
+            val email = v.groups["email"]!!.value
+            return Identity(real, email, comment)
+        }
+    }
 }
 
 class SignedIdentity(
-        realName: String,
-        email: String,
-        comment: String?,
-        val status: Char,
-        val gpgName: String,
+        base: Identity,
+        comment: String,
+        val status: String,
         val gpgKey: String
-) : Identity(realName, email, comment)
+) : Identity(base.realName, base.email, comment) {
+    override fun toString(): String = "${super.toString()} signed [$status] by [$gpgKey]"
+}
