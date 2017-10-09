@@ -7,48 +7,48 @@ import com.google.gson.JsonObject
  * @author James Tapsell
  */
 data class Commit(
-        val commitHash: String,
-        val parentHashes: String,
+        val commitHash: Hash,
+        val parentHashes: Hash?,
         val subject: String,
         val author: Identity,
         val committer: Identity,
-        val status: String,
-        val gpgSigner: String,
-        val gpgKey: String) {
+        val signer: SignedIdentity?) {
 
     companion object {
         fun convert(
-            commitHash: String,
-            parentHashes: String,
-            subject: String,
-            authorName: String,
-            authorEmail: String,
-            committerName: String,
-            committerEmail: String,
-            status: String,
-            gpgSigner: String,
-            gpgKey: String): Commit {
+                commitHash: String,
+                parentHashes: String,
+                subject: String,
+                authorName: String,
+                authorEmail: String,
+                committerName: String,
+                committerEmail: String,
+                statusCode: String,
+                gpgSigner: String,
+                gpgKey: String): Commit {
             var author = Identity(authorName, authorEmail, null)
             var committer = Identity(committerName, committerEmail, null)
 
+            val status = SignatureStatus.getForLetter(statusCode[0])
+            var signIdent: SignedIdentity? = null
+
             if (!gpgSigner.isBlank()) {
-                val signIdent = Identity.fromGpgString(gpgSigner)
+                val unsignedGpg = Identity.fromGpgString(gpgSigner)
+                signIdent = SignedIdentity(unsignedGpg, unsignedGpg.comment, status, gpgKey)
                 if (author.email == signIdent.email) {
-                    author = SignedIdentity(author, signIdent.comment!!, status, gpgKey)
+                    author = SignedIdentity(author, signIdent.comment, status, gpgKey)
                 }
                 if (committer.email == signIdent.email) {
-                    committer = SignedIdentity(committer, signIdent.comment!!, status, gpgKey)
+                    committer = SignedIdentity(committer, signIdent.comment, status, gpgKey)
                 }
             }
             return Commit(
-                    commitHash,
-                    parentHashes,
+                    Hash.fromString(commitHash)!!,
+                    Hash.fromString(parentHashes),
                     subject,
                     author,
                     committer,
-                    status,
-                    gpgSigner,
-                    gpgKey)
+                    signIdent)
         }
         val PRETTY_STRING = "{" +
                 "commitHash=\"%H\"," +
@@ -87,9 +87,7 @@ data class Commit(
         | ┃ Subject     │ "$subject"
         | ┃ Author      │ $author
         | ┃ Committer   │ $committer
-        | ┃ Status      │ $status
-        | ┃ GPG Key     │ $gpgKey
-        | ┃ GPG Signer  │ $gpgSigner
+        | ┃ Signer      │ $signer
         | ┗━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     """.trimMargin()
 }
