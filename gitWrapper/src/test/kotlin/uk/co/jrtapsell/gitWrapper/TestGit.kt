@@ -25,5 +25,8 @@ class TestGit {
         val repository = Git(path)
         val commits = repository.listCommits()
         Assert.assertNotEquals(commits.size, 0)
+        for (commit in commits) {
+            println(commit)
+        }
     }
 }
