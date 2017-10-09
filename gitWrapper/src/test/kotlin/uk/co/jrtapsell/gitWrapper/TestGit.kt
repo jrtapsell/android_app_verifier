@@ -11,8 +11,7 @@ class TestGit {
 
     @DataProvider(name = "repos")
     fun listRepos(): Array<Array<String>> = arrayOf(
-            "/home/james/FYP/demoRepo",
-            PROJECT_DIR
+            "./"
     ).map { arrayOf(it) }.toTypedArray()
 
     @Test(dataProvider = "repos")
