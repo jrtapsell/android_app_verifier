@@ -4,3 +4,4 @@
 */build/
 */out/
 *.iml
+gitWrapper/src/test/kotlin/uk/co/jrtapsell/gitWrapper/RepoProvider.kt
