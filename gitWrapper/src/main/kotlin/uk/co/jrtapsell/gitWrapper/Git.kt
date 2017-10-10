@@ -1,6 +1,7 @@
 package uk.co.jrtapsell.gitWrapper
 
 import uk.co.jrtapsell.gitWrapper.data.Commit
+import uk.co.jrtapsell.gitWrapper.data.SignatureStatus
 import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
 import java.io.IOException
@@ -39,5 +40,9 @@ class Git(private val directory: String) {
         }
         return back.map { it as Commit }
     }
+
+    fun getState(): SignatureStatus = this.listCommits()
+            .map { it.signer?.status?:SignatureStatus.UNSIGNED }
+            .max() ?: SignatureStatus.UNSIGNED
 
 }

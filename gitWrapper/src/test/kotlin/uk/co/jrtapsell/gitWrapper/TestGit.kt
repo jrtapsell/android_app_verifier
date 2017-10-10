@@ -3,6 +3,7 @@ package uk.co.jrtapsell.gitWrapper
 import org.testng.Assert
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
+import uk.co.jrtapsell.gitWrapper.data.SignatureStatus
 
 /**
  * @author James Tapsell
@@ -54,5 +55,11 @@ class TestGit {
     fun `Tries for a directory that is not a repo`() {
         val repo = Git("/tmp")
         repo.listCommits()
+    }
+
+    @Test
+    fun `Checks the local repo is securely signed`() {
+        val repo = Git("./")
+        Assert.assertEquals(repo.getState(), SignatureStatus.GOOD)
     }
 }
