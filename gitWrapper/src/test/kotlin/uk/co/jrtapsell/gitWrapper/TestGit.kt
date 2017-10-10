@@ -62,4 +62,9 @@ class TestGit {
         val repo = Git("./")
         Assert.assertEquals(repo.getState(), SignatureStatus.GOOD)
     }
+
+    @Test(dataProviderClass = RepoProvider::class, dataProvider = "repos")
+    fun `Checks the status of known repos `(repo: Repo) {
+        Assert.assertEquals(Git(repo.path).getState(), repo.state)
+    }
 }
