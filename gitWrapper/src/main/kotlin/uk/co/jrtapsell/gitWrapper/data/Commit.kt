@@ -8,7 +8,7 @@ import com.google.gson.JsonObject
  */
 data class Commit(
         val commitHash: Hash,
-        val parentHashes: Hash?,
+        val parentHashes: List<Hash>,
         val subject: String,
         val author: Identity,
         val committer: Identity,
@@ -42,9 +42,14 @@ data class Commit(
                     committer = SignedIdentity(committer, signIdent.comment, status, gpgKey)
                 }
             }
+            
+            val parents = parentHashes.split(" ")
+                    .filter { it.isNotEmpty() }
+                    .map { Hash.fromString(it)!! }
+
             return Commit(
                     Hash.fromString(commitHash)!!,
-                    Hash.fromString(parentHashes),
+                    parents,
                     subject,
                     author,
                     committer,
