@@ -1,9 +1,13 @@
 package uk.co.jrtapsell.gitWrapper
 
 import uk.co.jrtapsell.gitWrapper.data.Commit
+import uk.co.jrtapsell.gitWrapper.data.SignatureStatus
 import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
+import uk.co.jrtapsell.gitWrapper.utils.Union
 import java.io.IOException
+
+typealias CommitOrString = Union<Commit, String>
 
 class Git(private val directory: String) {
     fun listCommits(): List<Commit> {
@@ -21,12 +25,16 @@ class Git(private val directory: String) {
                 else -> "Cannot run git in $directory, unknown error"
             })
         }
-        val back = process.use {
-            it.map {
-                if (it.stream == Line.IOStream.ERR) it.text else Commit.convert(it.text)
+        val back: List<CommitOrString> = process.use {
+            it.map<Line, CommitOrString> {
+                if (it.stream == Line.IOStream.ERR) {
+                    CommitOrString.makeSecondary(it.text)
+                } else {
+                    CommitOrString.makePrimary(Commit.convert(it.text))
+                }
             }
         }.toList()
-        val errLines = back.filter { it is String }.map { it as String }
+        val errLines = back.filter { !it.hasPrimary() }.map { it.getSecondary() }
         if (errLines.isNotEmpty()) {
             val message = errLines.joinToString("\n").trim()
             if (message == "fatal: Not a git repository (or any of the parent directories): .git") {
@@ -37,7 +45,11 @@ class Git(private val directory: String) {
         if (process.exitCode != 0) {
             throw GitException("Couldn't list commits, git returned ${process.exitCode}")
         }
-        return back.map { it as Commit }
+        return back.map { it.getPrimary() }
     }
+
+    fun getState(): SignatureStatus = this.listCommits()
+            .map { it.signer?.status?:SignatureStatus.UNSIGNED }
+            .max() ?: SignatureStatus.UNSIGNED
 
 }
