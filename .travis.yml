@@ -1,2 +1,4 @@
 language: java
 before_script: cd gitWrapper
+before_install:
+- curl https://www.jrtapsell.co.uk/pgp.asc | gpg --import 
