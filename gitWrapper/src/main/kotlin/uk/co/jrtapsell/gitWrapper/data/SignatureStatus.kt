@@ -1,25 +1,62 @@
 package uk.co.jrtapsell.gitWrapper.data
 
-/**
- * Represents a commit signature status, the documentation lists the following values:
- *
- *   - "G" for a good (valid) signature,
- *   - "B" for a bad signature,
- *   - "U" for a good signature with unknown validity,
- *   - "X" for a good signature that has expired,
- *   - "Y" for a good signature made by an expired key,
- *   - "R" for a good signature made by a revoked key,
- *   - "E" if the signature cannot be checked (e.g. missing key) and
- *   - "N" for no signature
- */
+/** Represents a commit signature status. */
 enum class SignatureStatus(val code: Char) {
+
+    /**
+     * A good signature.
+     *
+     * **Documentation:** _for a good (valid) signature_
+     */
     GOOD('G'),
+
+    /**
+     * A bad signature (a signature that has been modified or messed with).
+     *
+     * **Documentation:** _for a bad signature_
+     */
     BAD('B'),
+
+    /**
+     * A good signature with an unknown key, so the owner cannot be identified.
+     *
+     * **Documentation:** _for a good signature with unknown validity_
+     */
     UNKNOWN_KEY('U'),
+
+    /**
+     * A signature with a key that was valid before the signature, but became invalid since.
+     *
+     * **Documentation:** _for a good signature that has expired_
+     */
     EXPIRED_AFTER_SIGNATURE('X'),
+
+    /**
+     * A signature with a key that was invalid at the time of signature.
+     *
+     * **Documentation:** _for a good signature made by an expired key_
+     */
     EXPIRED_BEFORE_SIGNATURE('Y'),
+
+    /**
+     * Signed with a revoked key.
+     *
+     * **Documentation:** _for a good signature made by a revoked key_
+     */
     REVOKED('R'),
+
+    /**
+     * Signed with a revoked key.
+     *
+     * **Documentation:** _if the signature cannot be checked (e.g. missing key)_
+     */
     UNCHECKABLE('E'),
+
+    /**
+     * Not signed.
+     *
+     * **Documentation:** _for no signature_
+     */
     UNSIGNED('N');
     
     companion object {

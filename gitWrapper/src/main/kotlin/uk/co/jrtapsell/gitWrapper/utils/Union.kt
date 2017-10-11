@@ -1,6 +1,6 @@
 package uk.co.jrtapsell.gitWrapper.utils
 
-data class Union<T: Any, U: Any> private constructor(private val primary: T?, private val secondary: U?) {
+data class Union<out T: Any, out U: Any> private constructor(private val primary: T?, private val secondary: U?) {
 
     companion object {
         fun <T: Any, U: Any> makePrimary(value: T): Union<T, U> {
