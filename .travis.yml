@@ -1,5 +1,4 @@
 language: java
-before_script: cd gitWrapper
 before_install:
 - gpg --import j1.asc
 - gpg --import j2.asc
