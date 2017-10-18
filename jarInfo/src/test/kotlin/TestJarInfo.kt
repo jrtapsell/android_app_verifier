@@ -17,6 +17,6 @@ class TestJarInfo {
 
     @Test
     fun checkSig() {
-        val ret = info.getSigner()
+        val ret = info.isSigned()
     }
 }

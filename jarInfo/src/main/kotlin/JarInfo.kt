@@ -1,4 +1,5 @@
 import java.io.InputStream
+import java.security.CodeSigner
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.jar.JarEntry
@@ -36,22 +37,16 @@ class JarInfo(val filePath: String) {
         }
     }
 
-    fun getSigner() {
-        walk().forEach { record ->
-            record.getContents().readAllBytes()
-            val signers = record.entry.codeSigners
-            val certs = record.entry.certificates
+    fun isSigned(): Boolean {
+        val signers = walk().filter { (entry, _, _) ->
+            !entry.isDirectory
+        }.map<Record, Array<CodeSigner>> { (entry, _, getContents) ->
+            val contents = getContents()
+            while (contents.read() != -1);
+            entry.codeSigners?: arrayOf()
+        }.toList()
 
-            if (signers == null || certs == null) {
-                return@forEach
-            }
-
-            val xcert = signers[0].signerCertPath.certificates
-                        .filter { it is X509Certificate }
-                        .map { it as X509Certificate }
-
-            validate(xcert.toTypedArray())
-        }
+        return signers.any { it.isEmpty() }
     }
 
     fun validate(cert: Array<out X509Certificate>) {
@@ -60,7 +55,7 @@ class JarInfo(val filePath: String) {
         val ks: KeyStore? = null
         trustManagerFactory.init(ks)
 
-        for (trustManager in trustManagerFactory.getTrustManagers()) {
+        for (trustManager in trustManagerFactory.trustManagers) {
             if (trustManager is X509TrustManager) {
                 trustManager.checkServerTrusted(cert,"RSA")
             }
