@@ -1,3 +1,6 @@
 rootProject.name = 'finalYearProject'
 
 include('gitWrapper')
+include 'jarInfo'
+include 'demoJar'
+

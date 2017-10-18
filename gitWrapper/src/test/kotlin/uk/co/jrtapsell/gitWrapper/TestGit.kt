@@ -4,6 +4,7 @@ import org.testng.Assert
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 import uk.co.jrtapsell.gitWrapper.data.SignatureStatus
+import java.lang.management.ManagementFactory
 
 /**
  * @author James Tapsell
@@ -66,5 +67,10 @@ class TestGit {
     @Test(dataProviderClass = RepoProvider::class, dataProvider = "repos")
     fun `Checks the status of known repos `(repo: Repo) {
         Assert.assertEquals(Git(repo.path).getState(), repo.state)
+    }
+
+    @Test
+    fun `Prints the jvm info`() {
+        println(ManagementFactory.getRuntimeMXBean().getVmVersion())
     }
 }
