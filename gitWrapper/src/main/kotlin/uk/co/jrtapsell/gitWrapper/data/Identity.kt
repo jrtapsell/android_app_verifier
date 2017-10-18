@@ -7,12 +7,12 @@ open class Identity(
     override fun toString() = "$realName ($comment) <$email>"
 
     companion object {
-        private val GPG_REGEX = Regex("""(?<real>[^(]+?) *\((?<comment>[^)]+)\) *<(?<email>[^>]+)>""")
+        private val GPG_REGEX = Regex("""([^(]+?) *\(([^)]+)\) *<([^>]+)>""")
         fun fromGpgString(gpgString: String): Identity {
             val v = GPG_REGEX.matchEntire(gpgString)!!
-            val real = v.groups["real"]!!.value
-            val comment = v.groups["comment"]!!.value
-            val email = v.groups["email"]!!.value
+            val real = v.groups[0]!!.value
+            val comment = v.groups[1]!!.value
+            val email = v.groups[2]!!.value
             return Identity(real, email, comment)
         }
     }

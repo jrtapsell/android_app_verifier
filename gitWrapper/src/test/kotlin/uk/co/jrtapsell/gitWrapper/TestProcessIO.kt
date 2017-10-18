@@ -4,6 +4,7 @@ import org.testng.Assert
 import org.testng.annotations.Test
 import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
+import java.io.File
 
 /** Using https://www.tengio.com/blog/more-readable-tests-with-kotlin/ */
 class TestProcessIO {
@@ -34,9 +35,10 @@ class TestProcessIO {
 
     @Test
     fun `Checks test script exit code is returned`() {
+        println(File("").absoluteFile.toString())
         val pro = run(
                 true,
-                PROJECT_DIR +"/scripts/",
+                "scripts/",
                 "bash",
                 "exit.sh",
                 "1")
