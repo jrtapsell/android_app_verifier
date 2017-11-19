@@ -7,7 +7,11 @@ data class Repo(val path: String, val state: SignatureStatus)
 
 /** Modify for each testing environment. */
 val TEST_REPOS = listOf(
-        Repo("./", SignatureStatus.GOOD)
+        Repo("./", SignatureStatus.GOOD),
+        Repo("/home/james/binBot", SignatureStatus.UNSIGNED),
+        Repo("/home/james/FYP/demoRepo", SignatureStatus.GOOD),
+        Repo("/home/james/FYP/notes", SignatureStatus.UNSIGNED),
+        Repo("/home/james/FYP/plan", SignatureStatus.UNSIGNED)
 )
 
 class RepoProvider {

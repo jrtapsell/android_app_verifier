@@ -1,15 +1,15 @@
+package uk.co.jrtapsell.jarInfo
+
 import java.io.InputStream
 import java.security.CodeSigner
-import java.security.KeyStore
 import java.security.cert.X509Certificate
+import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 data class Record(val entry: JarEntry, val path: List<String>, val getContents: ()-> InputStream) {
     override fun toString(): String {
-        return "Record(${entry.name})"
+        return "uk.co.jrtapsell.jarInfo.Record(${entry.name})"
     }
 }
 class JarInfo(val filePath: String) {
@@ -37,28 +37,28 @@ class JarInfo(val filePath: String) {
         }
     }
 
+    val noSign = Regex("""META-INF/[A-Z]+\.(RSA|DSA|SF)""")
+
     fun isSigned(): Boolean {
         val signers = walk().filter { (entry, _, _) ->
-            !entry.isDirectory
-        }.map<Record, Array<CodeSigner>> { (entry, _, getContents) ->
+            !entry.isDirectory && !noSign.matches(entry.name)
+        }.map { (entry, _, getContents) ->
             val contents = getContents()
             while (contents.read() != -1);
-            entry.codeSigners?: arrayOf()
+            entry.name to (entry.codeSigners?.toList()?: listOf())
         }.toList()
 
-        return signers.any { it.isEmpty() }
+        return signers.all { hasValid(it) }
     }
 
-    fun validate(cert: Array<out X509Certificate>) {
-        val trustManagerFactory =
-        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-        val ks: KeyStore? = null
-        trustManagerFactory.init(ks)
-
-        for (trustManager in trustManagerFactory.trustManagers) {
-            if (trustManager is X509TrustManager) {
-                trustManager.checkServerTrusted(cert,"RSA")
-            }
+    private fun hasValid(it: Pair<String, List<CodeSigner>>): Boolean {
+        val signers = it.second
+        val valid = signers.any {
+            val head = it.signerCertPath.certificates[0] as? X509Certificate ?: return false
+            val signer = "1.3.6.1.5.5.7.3.3" in (head.extendedKeyUsage?:return false)
+            val current = head.notAfter.after(Date()) && head.notBefore.before(Date())
+            return signer && current
         }
+        return valid
     }
 }
