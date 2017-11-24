@@ -33,7 +33,16 @@ object GpgWrapper {
         return SignatureStatus(goodSig, goodSig)
     }
 
-    fun sign(signature: String): String {
-        throw AssertionError()
+    fun sign(message: String): String {
+        val process = run(true, "/", "gpg", "-armor", "-s")
+        message.lines().forEach {
+            process.inputLine(it)
+        }
+        process.closeInput()
+        return process.filter {
+            it.stream == Line.IOStream.OUT
+        }.map {
+            it.text
+        }.joinToString(System.lineSeparator())
     }
 }

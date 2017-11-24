@@ -33,4 +33,11 @@ class TestGpgWrapper {
         val sigState = GpgWrapper.validate(message, signature)
         Assert.assertEquals(sigState, test.signatureStatus)
     }
+
+    @Test
+    fun testSign() {
+        val helloWorld = "Hello World"
+        val signature = GpgWrapper.sign(helloWorld)
+        Assert.assertTrue(GpgWrapper.validate(helloWorld, signature).valid)
+    }
 }
