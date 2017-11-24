@@ -4,7 +4,7 @@
 
     <test name="Process">
         <classes>
-            <class name="uk.co.jrtapsell.jarInfo.TestJarInfo"/>
+            <class name="uk.co.jrtapsell.gpgWrapper.TestGpgWrapper"/>
         </classes>
     </test>
 
