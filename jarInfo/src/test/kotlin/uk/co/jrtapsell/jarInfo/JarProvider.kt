@@ -6,11 +6,11 @@ data class TestJar(val path: String, val signed: Boolean, val signers: List<Stri
 
 /** Modify for each testing environment. */
 val TEST_REPOS = listOf(
-        TestJar("demoFiles/old.jar", false, listOf()),
-        TestJar("demoFiles/unsigned.jar", false, listOf()),
-        TestJar("demoFiles/sqljdbc42.jar", true, listOf()),
-        TestJar("demoFiles/self.jar", false, listOf()),
-        TestJar("demoFiles/web.jar", false, listOf())
+        TestJar("../demoJars/old.jar", false, listOf()),
+        TestJar("../demoJars/unsigned.jar", false, listOf()),
+        TestJar("../demoJars/sqljdbc42.jar", true, listOf()),
+        TestJar("../demoJars/self.jar", false, listOf()),
+        TestJar("../demoJars/web.jar", false, listOf())
 )
 
 class JarProvider {
