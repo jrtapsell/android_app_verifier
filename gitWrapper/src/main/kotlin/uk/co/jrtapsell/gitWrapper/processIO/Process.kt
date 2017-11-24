@@ -5,6 +5,7 @@ import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import java.util.Scanner
 import extensions._Thread.thread
+import java.io.PrintStream
 
 /** An output line/ */
 data class Line(val text: String, val stream: IOStream) {
@@ -24,6 +25,12 @@ class OutputSequence(
 
     private val store = TerminatedSource(Line("", Line.IOStream.STOP))
 
+    private val input = PrintStream(process.outputStream)
+
+    public fun inputLine(line: String) {
+        input.println(line)
+    }
+
     /** Waits for the process to stop, killing it if asked to. */
     override fun close() {
         if (!waitFor) {
@@ -35,6 +42,7 @@ class OutputSequence(
             }
         }
         exitCode = process.waitFor()
+        input.close()
         out.join()
         err.join()
     }
@@ -82,6 +90,10 @@ class OutputSequence(
 
     /** Represents the OutputSource as a string. */
     override fun toString() = "Process P$hashCode"
+
+    fun closeInput() {
+        input.close()
+    }
 }
 
 /**
