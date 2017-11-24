@@ -18,14 +18,12 @@ class TestInject {
     val JarManipulator.info: JarInfo
         get() = JarInfo(filename)
 
-    @Test
+    @Test(enabled = false)
     fun test() {
         val tempDir = mkTemp()
         try {
             val unsignedPath = tempDir.resolve("unsigned.jar").toPath()
-            Files.copy(
-                    Paths.get("../demoJars/unsigned.jar"),
-                    unsignedPath)
+            Files.copy(Paths.get("../demoJars/unsigned.jar"), unsignedPath)
             val unsigned = JarManipulator(unsignedPath.toString())
             Assert.assertFalse(unsigned.info.isSigned())
             val signedPath = tempDir.resolve("signed").canonicalPath!!
