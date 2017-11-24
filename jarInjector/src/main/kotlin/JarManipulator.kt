@@ -1,16 +1,19 @@
 import java.io.File
 
-class JarInjector {
+class JarManipulator(val filename: String) {
     fun inject(
-        inputJarfile: String,
         outputJarfile: String,
-        file: String) {
-
+        file: String): JarManipulator {
+        throw AssertionError()
     }
 
     fun sign(
-        inputJarfile: String,
-        outputJarfile: String) {
+        outputJarfile: String): JarManipulator {
+        throw AssertionError()
+    }
 
+    fun unsign(
+        outputJarfile: String): JarManipulator {
+        throw AssertionError()
     }
 }
