@@ -1,4 +1,4 @@
-import java.io.File
+package uk.co.jrtapsell.jarInjector
 
 class JarManipulator(val filename: String) {
     fun inject(

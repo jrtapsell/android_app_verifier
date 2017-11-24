@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Project">
+
+    <test name="Process">
+        <classes>
+            <class name="uk.co.jrtapsell.jarInjector.TestInject"/>
+        </classes>
+    </test>
+
+</suite>
