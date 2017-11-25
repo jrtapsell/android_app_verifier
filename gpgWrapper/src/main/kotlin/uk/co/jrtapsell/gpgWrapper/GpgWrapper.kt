@@ -33,7 +33,13 @@ object GpgWrapper {
     }
 
     fun sign(message: String): String {
-        val process = run(true, "/", "gpg", "--armor", "-s")
+        val command = arrayOf(
+                "gpg",
+                "--passphrase",
+                System.getenv("JRT_GPG_PASSWORD")?:"UNSET",
+                "--armor",
+                "-s")
+        val process = run(true, "/", *command)
         message.lines().forEach {
             process.inputLine(it)
         }
