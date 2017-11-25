@@ -12,5 +12,4 @@ fingerprint=$(gpg --fingerprint example@example.com | grep "=" | cut -d "=" -f 2
 #gpg-agent --daemon --verbose --allow-preset-passphrase
 
 #/usr/lib/gnupg2/gpg-preset-passphrase --preset -P password $fingerprint
-alias gpg="gpg --passphrase password"
 cd ..

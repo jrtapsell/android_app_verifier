@@ -1,5 +1,6 @@
 language: java
 before_install:
 - setup/setup.sh
+- alias gpg="gpg --passphrase password"
 jdk:
   - oraclejdk8
