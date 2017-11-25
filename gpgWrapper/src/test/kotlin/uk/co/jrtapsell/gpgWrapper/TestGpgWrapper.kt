@@ -22,7 +22,10 @@ class TestGpgWrapper {
                         SignatureStatus(true, true)),
                 Testmessage("gpgTestFiles/badMix/message.txt",
                         "gpgTestFiles/badMix/message.txt.asc",
-                        SignatureStatus(false, false))
+                        SignatureStatus(false, false)),
+                Testmessage("gpgTestFiles/untrusted/message.txt",
+                        "gpgTestFiles/untrusted/message.txt.asc",
+                        SignatureStatus(true, false))
         )
     }
 

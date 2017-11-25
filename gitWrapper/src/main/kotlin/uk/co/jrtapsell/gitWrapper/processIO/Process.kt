@@ -27,6 +27,8 @@ class OutputSequence(
 
     private val input = PrintStream(process.outputStream)
 
+    private val lineLog = mutableListOf<Line>()
+
     public fun inputLine(line: String) {
         input.println(line)
     }
@@ -61,7 +63,9 @@ class OutputSequence(
         return thread(group, name) {
             val scanner = Scanner(stream)
             while (scanner.hasNextLine()) {
-                store.push(Line(scanner.nextLine(), type))
+                val line = Line(scanner.nextLine(), type)
+                store.push(line)
+                lineLog.add(line)
             }
         }
     }
@@ -93,6 +97,13 @@ class OutputSequence(
 
     fun closeInput() {
         input.close()
+    }
+
+    fun assertClosedCleanly() {
+        if (exitCode != 0) {
+            val errorMessage = lineLog.joinToString(System.lineSeparator()){ it.text }
+            throw AssertionError("Exit code was not 0:\n$errorMessage")
+        }
     }
 }
 

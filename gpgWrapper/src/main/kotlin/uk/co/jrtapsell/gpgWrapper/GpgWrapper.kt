@@ -24,22 +24,24 @@ object GpgWrapper {
                 Regex("gpg: Signature made (.*) using (.*) key ID (.*)"),
                 Regex("gpg: Good signature from (.*)")
         )
-        val valid = signature.zip(signatureRegexes).all { (line, regex) ->
+        val (signatureState, trust) = signature.zip(signatureRegexes).map { (line, regex) ->
             regex.matchEntire(line) != null
         }
         val sameMessage = message.lines() == signedMessage
 
-        val goodSig = valid && sameMessage
-        return SignatureStatus(goodSig, goodSig)
+        return SignatureStatus(sameMessage && signatureState, sameMessage && trust)
     }
 
     fun sign(message: String): String {
-        val process = run(true, "/", "gpg", "-armor", "-s")
+        val process = run(true, "/", "gpg", "--armor", "-s")
         message.lines().forEach {
             process.inputLine(it)
         }
         process.closeInput()
-        return process.filter {
+        process.use{}
+        val lines = process.toList()
+        process.assertClosedCleanly()
+        return lines.filter {
             it.stream == Line.IOStream.OUT
         }.map {
             it.text
