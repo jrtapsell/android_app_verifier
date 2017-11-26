@@ -1,13 +1,20 @@
-package uk.co.jrtapsell.gitWrapper
+package uk.co.jrtapsell.gitWrapper.processIO
 
 import org.testng.Assert
 import org.testng.annotations.Test
-import uk.co.jrtapsell.gitWrapper.processIO.Line
-import uk.co.jrtapsell.gitWrapper.processIO.run
 import java.io.File
 
 /** Using https://www.tengio.com/blog/more-readable-tests-with-kotlin/ */
 class TestProcessIO {
+
+    fun timeLimit(minimumMS: Long, maximumMS: Long, block: () -> Unit) {
+        val start = System.currentTimeMillis()
+        block.invoke()
+        val end = System.currentTimeMillis()
+        val delta = end - start
+        Assert.assertTrue(delta >= minimumMS, "Block took too little time $delta")
+        Assert.assertTrue(delta <= maximumMS, "Block took too much time $delta")
+    }
 
     @Test
     fun `Runs ls as a basic process test`() {

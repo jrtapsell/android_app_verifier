@@ -39,7 +39,7 @@ class JarInfo(val filePath: String) {
 
     val noSign = Regex("""META-INF/[A-Z]+\.(RSA|DSA|SF)""")
 
-    fun isSigned(): Boolean {
+    fun getTotalSigners(): List<List<X509Certificate>> {
         val signers = walk().filter { (entry, _, _) ->
             !entry.isDirectory && !noSign.matches(entry.name)
         }.map { (entry, _, getContents) ->
@@ -48,17 +48,35 @@ class JarInfo(val filePath: String) {
             entry.name to (entry.codeSigners?.toList()?: listOf())
         }.toList()
 
-        return signers.all { hasValid(it) }
+        fun X509Certificate.hexify() =
+            this.publicKey.encoded.joinToString(" ") { it.toString(16) }
+
+        if (signers.isEmpty()) return listOf()
+        val cover = filterValid(signers[0]).map { it.hexify() }.toMutableList()
+
+        val certs = mutableMapOf<String, List<X509Certificate>>()
+        signers.forEach {
+            it.second.forEach {
+                val certChain = it.signerCertPath.certificates.map { it as X509Certificate }
+                val head = certChain[0].hexify()
+                certs[head] = certChain
+            }
+            val items = filterValid(it).map { it.hexify() }
+            cover.removeIf { !items.contains(it) }
+        }
+        return cover.mapNotNull(certs::get)
     }
 
-    private fun hasValid(it: Pair<String, List<CodeSigner>>): Boolean {
+    private fun filterValid(it: Pair<String, List<CodeSigner>>): MutableList<X509Certificate> {
         val signers = it.second
-        val valid = signers.any {
-            val head = it.signerCertPath.certificates[0] as? X509Certificate ?: return false
-            val signer = "1.3.6.1.5.5.7.3.3" in (head.extendedKeyUsage?:return false)
-            val current = head.notAfter.after(Date()) && head.notBefore.before(Date())
-            return signer && current
-        }
-        return valid
+        val valid = signers
+            .mapNotNull { it.signerCertPath.certificates[0] as? X509Certificate }
+            .filter { head ->
+                val extendedKeyUsage = head.extendedKeyUsage ?: return@filter false
+                val signer = "1.3.6.1.5.5.7.3.3" in extendedKeyUsage
+                val current = head.notAfter.after(Date()) && head.notBefore.before(Date())
+                signer && current
+            }
+        return valid.toMutableList()
     }
 }

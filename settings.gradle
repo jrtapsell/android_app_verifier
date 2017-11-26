@@ -6,4 +6,5 @@ include 'demoJar'
 include 'jarInjector'
 include 'gpgWrapper'
 include 'keybaseConnector'
+include 'processTools'
 

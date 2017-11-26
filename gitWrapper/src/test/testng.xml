@@ -2,19 +2,9 @@
 
 <suite name="Git Wrapper">
 
-    <test name="ProcessIO">
-        <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.TestProcessIO"/>
-        </classes>
-    </test>
     <test name="Git">
         <classes>
             <class name="uk.co.jrtapsell.gitWrapper.TestGit"/>
-        </classes>
-    </test>
-    <test name="TerminatedSource">
-        <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.TestTerminatedSource"/>
         </classes>
     </test>
 

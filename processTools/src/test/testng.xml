@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Git Wrapper">
+
+    <test name="ProcessIO">
+        <classes>
+            <class name="uk.co.jrtapsell.gitWrapper.processIO.TestProcessIO"/>
+        </classes>
+    </test>
+    <test name="TerminatedSource">
+        <classes>
+            <class name="uk.co.jrtapsell.gitWrapper.processIO.TestTerminatedSource"/>
+        </classes>
+    </test>
+</suite>

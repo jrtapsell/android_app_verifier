@@ -1,4 +1,4 @@
-package uk.co.jrtapsell.gitWrapper
+package uk.co.jrtapsell.gitWrapper.processIO
 
 import org.testng.Assert
 import org.testng.annotations.Test
