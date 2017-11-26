@@ -29,9 +29,7 @@ class OutputSequence(
 
     private val lineLog = mutableListOf<Line>()
 
-    public fun inputLine(line: String) {
-        input.println(line)
-    }
+    fun inputLine(line: String) = input.println(line)
 
     /** Waits for the process to stop, killing it if asked to. */
     override fun close() {

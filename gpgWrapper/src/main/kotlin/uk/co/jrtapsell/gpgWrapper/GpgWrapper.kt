@@ -2,29 +2,50 @@ package uk.co.jrtapsell.gpgWrapper
 
 import uk.co.jrtapsell.gitWrapper.processIO.Line
 import uk.co.jrtapsell.gitWrapper.processIO.run
+import java.io.File
 
 data class SignatureStatus(val valid: Boolean, val trusted: Boolean)
-object GpgWrapper {
-    fun validate(message: String, signature: String): SignatureStatus {
 
-        val process = run (true, "/", "gpg", "-d")
+class MockCloseable: AutoCloseable {
+    override fun close() {}
+}
+
+object GpgWrapper {
+    fun validate(message: String, signature: String, vararg signatureKey: GpgKey = arrayOf()): SignatureStatus {
+
+        val (command, key) = if (signatureKey.isEmpty()) {
+            arrayOf("gpg",
+                    "-d") to MockCloseable()
+        } else {
+            val temp = File.createTempFile("key", ".asc")
+            temp.appendText(GpgKey.dearmor(*signatureKey))
+            arrayOf("gpg",
+                    "--no-default-keyring",
+                    "--keyring",
+                    temp.canonicalPath,
+                    "-d") to AutoCloseable { temp.delete() }
+        }
+
+        val process = run (true, "/", *command)
 
         signature.lines().forEach {
             process.inputLine(it)
         }
         process.closeInput()
 
+        process.use {}
         val lines = process.toList()
+        key.close()
 
         val signedMessage = lines.filter { it.stream == Line.IOStream.OUT }.map { it.text }
 
-        val signature = lines.filter { it.stream == Line.IOStream.ERR }.map { it.text }
+        val signatureText = lines.filter { it.stream == Line.IOStream.ERR }.map { it.text }
 
         val signatureRegexes = listOf(
                 Regex("gpg: Signature made (.*) using (.*) key ID (.*)"),
                 Regex("gpg: Good signature from (.*)")
         )
-        val (signatureState, trust) = signature.zip(signatureRegexes).map { (line, regex) ->
+        val (signatureState, trust) = signatureText.zip(signatureRegexes).map { (line, regex) ->
             regex.matchEntire(line) != null
         }
         val sameMessage = message.lines() == signedMessage

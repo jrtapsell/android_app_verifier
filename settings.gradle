@@ -5,4 +5,5 @@ include 'jarInfo'
 include 'demoJar'
 include 'jarInjector'
 include 'gpgWrapper'
+include 'keybaseConnector'
 

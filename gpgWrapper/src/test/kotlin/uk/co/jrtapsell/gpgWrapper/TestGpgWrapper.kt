@@ -17,14 +17,14 @@ class TestGpgWrapper {
     @DataProvider(name = "messages")
     fun message(): Array<Testmessage> {
         return arrayOf(
-                Testmessage("gpgTestFiles/trusted/message.txt",
-                        "gpgTestFiles/trusted/message.txt.asc",
+                Testmessage("../gpgTestFiles/trusted/message.txt",
+                        "../gpgTestFiles/trusted/message.txt.asc",
                         SignatureStatus(true, true)),
-                Testmessage("gpgTestFiles/badMix/message.txt",
-                        "gpgTestFiles/badMix/message.txt.asc",
+                Testmessage("../gpgTestFiles/badMix/message.txt",
+                        "../gpgTestFiles/badMix/message.txt.asc",
                         SignatureStatus(false, false)),
-                Testmessage("gpgTestFiles/untrusted/message.txt",
-                        "gpgTestFiles/untrusted/message.txt.asc",
+                Testmessage("../gpgTestFiles/untrusted/message.txt",
+                        "../gpgTestFiles/untrusted/message.txt.asc",
                         SignatureStatus(true, false))
         )
     }
