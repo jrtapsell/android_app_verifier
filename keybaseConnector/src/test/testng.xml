@@ -2,10 +2,15 @@
 
 <suite name="Keybase">
 
-    <test name="Test">
+    <test name="Users">
         <classes>
-            <class name="TestGetJrtapsell"/>
+            <class name="TestGetUsers"/>
         </classes>
     </test>
 
+    <test name="Signatures">
+        <classes>
+            <class name="TestSignedMessage"/>
+        </classes>
+    </test>
 </suite>

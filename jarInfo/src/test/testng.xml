@@ -2,7 +2,7 @@
 
 <suite name="Jar Info">
 
-    <test name="Tesr">
+    <test name="Test">
         <classes>
             <class name="uk.co.jrtapsell.jarInfo.TestJarInfo"/>
         </classes>

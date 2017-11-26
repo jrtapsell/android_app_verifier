@@ -30,15 +30,15 @@ class TestGpgWrapper {
     }
 
     @Test(dataProvider = "messages")
-    fun testAll(test: Testmessage) {
+    fun `Checks various signatures`(test: Testmessage) {
         val message = getResource(test.messagePath)
         val signature = getResource(test.sigPath)
         val sigState = GpgWrapper.validate(message, signature)
         Assert.assertEquals(sigState, test.signatureStatus)
     }
 
-    @Test
-    fun testSign() {
+    @Test(enabled = false)
+    fun `Tries to sign a message, and checks it is signed`() {
         val helloWorld = "Hello World"
         val signature = GpgWrapper.sign(helloWorld)
         Assert.assertTrue(GpgWrapper.validate(helloWorld, signature).valid)

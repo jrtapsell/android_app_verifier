@@ -7,9 +7,9 @@ import java.io.File
 /**
  * @author James Tapsell
  */
-class TestGetJrtapsell {
+class TestGetUsers {
     @Test
-    fun testUsernames() {
+    fun `Checks test user's data is as expected`() {
         val response = Keybase.getByUsername("jrtapsell")!!
         assertEquals(response.usernames["keybase"], "jrtapsell")
         assertEquals(response.usernames["twitter"], "jrtapsell")
@@ -18,11 +18,4 @@ class TestGetJrtapsell {
         assertEquals(response.usernames["generic_web_site"], "www.jrtapsell.co.uk")
     }
 
-    @Test
-    fun testSignedMessage() {
-        val james = Keybase.getByUsername("jrtapsell")!!
-        val message = File("../gpgTestFiles/trusted/message.txt").readText()
-        val signature = File("../gpgTestFiles/trusted/message.txt.asc").readText()
-        GpgWrapper.validate(message, signature, *james.keys.toTypedArray())
-    }
 }

@@ -5,28 +5,21 @@ import org.testng.annotations.Test
 
 class TestJarInfo {
     @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
-    fun simpleList(tj: TestJar) {
+    fun `Checks that none of the test jars have 0 files in`(tj: TestJar) {
         val info = JarInfo(tj.path)
         val ret = info.walkFiles().toList()
         Assert.assertNotEquals(0, ret.size)
     }
 
     @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
-    fun listFiles(tj: TestJar) {
+    fun `Checks that directory listings work for META-INF`(tj: TestJar) {
         val info = JarInfo(tj.path)
         val ret = info.listDirectory("META-INF")
         Assert.assertNotEquals(0, ret.count())
     }
 
     @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
-    fun checkSig(tj: TestJar) {
-        val info = JarInfo(tj.path)
-        val ret = info.isSigned()
-        Assert.assertEquals(ret, tj.signed)
-    }
-
-    @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
-    fun checkValid(tj: TestJar) {
+    fun `Checks the jars signiture statuses are as expected`(tj: TestJar) {
         val info = JarInfo(tj.path)
         val ret = info.isSigned()
         Assert.assertEquals(ret, tj.signed)
