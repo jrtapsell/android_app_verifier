@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="Project">
+<suite name="Jar Injector">
 
-    <test name="Process">
+    <test name="Basic">
         <classes>
             <class name="uk.co.jrtapsell.jarInjector.TestInject"/>
         </classes>

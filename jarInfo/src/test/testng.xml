@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="Project">
+<suite name="Jar Info">
 
-    <test name="Process">
+    <test name="Tesr">
         <classes>
             <class name="uk.co.jrtapsell.jarInfo.TestJarInfo"/>
         </classes>

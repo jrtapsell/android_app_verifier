@@ -1,10 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="GPG Wrapper">
+<suite name="Keybase">
 
     <test name="Test">
         <classes>
-            <class name="uk.co.jrtapsell.gpgWrapper.TestGpgWrapper"/>
+            <class name="TestGetJrtapsell"/>
         </classes>
     </test>
 
