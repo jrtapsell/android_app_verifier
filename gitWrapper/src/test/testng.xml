@@ -4,12 +4,12 @@
 
     <test name="Git">
         <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.TestGit"/>
+            <class name="uk.co.jrtapsell.fyp.gitWrapper.TestGit"/>
         </classes>
     </test>
     <test name="Union">
         <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.utils.TestUnion"/>
+            <class name="uk.co.jrtapsell.fyp.gitWrapper.utils.TestUnion"/>
         </classes>
     </test>
 

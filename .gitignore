@@ -89,3 +89,5 @@ gradle-app.setting
 **/*.iml
 **/out/
 **/build/
+
+gitRepos/

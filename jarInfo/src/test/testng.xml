@@ -4,7 +4,7 @@
 
     <test name="Test">
         <classes>
-            <class name="uk.co.jrtapsell.jarInfo.TestJarInfo"/>
+            <class name="uk.co.jrtapsell.fyp.jarInfo.TestJarInfo"/>
         </classes>
     </test>
 

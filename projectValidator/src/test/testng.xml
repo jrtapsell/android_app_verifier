@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Project Validator">
+
+    <test name="Check project">
+        <classes>
+            <class name="uk.co.jrtapsell.fyp.projectValidator.PackageChecker"/>
+        </classes>
+    </test>
+
+</suite>

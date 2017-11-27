@@ -4,12 +4,12 @@
 
     <test name="ProcessIO">
         <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.processIO.TestProcessIO"/>
+            <class name="uk.co.jrtapsell.fyp.processTools.TestProcessIO"/>
         </classes>
     </test>
     <test name="TerminatedSource">
         <classes>
-            <class name="uk.co.jrtapsell.gitWrapper.processIO.TestTerminatedSource"/>
+            <class name="uk.co.jrtapsell.fyp.processTools.TestTerminatedSource"/>
         </classes>
     </test>
 </suite>

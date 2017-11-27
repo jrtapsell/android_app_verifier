@@ -4,7 +4,7 @@
 
     <test name="Test">
         <classes>
-            <class name="uk.co.jrtapsell.gpgWrapper.TestGpgWrapper"/>
+            <class name="uk.co.jrtapsell.fyp.gpgWrapper.TestGpgWrapper"/>
         </classes>
     </test>
 

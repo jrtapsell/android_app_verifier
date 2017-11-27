@@ -4,7 +4,7 @@
 
     <test name="Basic">
         <classes>
-            <class name="uk.co.jrtapsell.jarInjector.TestInject"/>
+            <class name="uk.co.jrtapsell.fyp.jarInjector.TestInject"/>
         </classes>
     </test>
 

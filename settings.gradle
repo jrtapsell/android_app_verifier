@@ -7,4 +7,5 @@ include 'jarInjector'
 include 'gpgWrapper'
 include 'keybaseConnector'
 include 'processTools'
+include 'projectValidator'
 
