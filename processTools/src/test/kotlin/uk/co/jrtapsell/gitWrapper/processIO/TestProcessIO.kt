@@ -53,4 +53,27 @@ class TestProcessIO {
 
         Assert.assertEquals(pro.exitCode, 1, "Wrong exit code")
     }
+
+    @Test
+    fun `Tests input can be read back`() {
+        val pro = run(true, "/", "cat", "-")
+        pro.inputLine("Hello World")
+        pro.closeInput()
+        val output = pro.map { it.text }.toList()
+        Assert.assertEquals(output, listOf("Hello World"))
+    }
+
+    @Test(expectedExceptions = arrayOf(AssertionError::class))
+    fun `Tests unclean close fails assertion`() {
+        val pro = run(true, "scripts/", "bash", "exit.sh", "1")
+        pro.use {  }
+        pro.assertClosedCleanly()
+    }
+
+    @Test
+    fun `Tests clean close passes assertion`() {
+        val pro = run(true, "scripts/", "bash", "exit.sh", "0")
+        pro.use {  }
+        pro.assertClosedCleanly()
+    }
 }

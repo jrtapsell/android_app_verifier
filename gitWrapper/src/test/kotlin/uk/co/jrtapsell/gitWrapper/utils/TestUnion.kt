@@ -34,5 +34,4 @@ class TestUnion {
         val union: DemoUnion = DemoUnion.makeSecondary(1)
         union.getPrimary()
     }
-
 }
