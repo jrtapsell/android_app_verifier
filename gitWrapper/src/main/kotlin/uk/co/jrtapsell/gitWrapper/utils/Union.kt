@@ -1,5 +1,7 @@
 package uk.co.jrtapsell.gitWrapper.utils
 
+class MissingValueException(message: String): RuntimeException(message)
+
 data class Union<out T : Any, out U : Any> private constructor(
         private val primary: T?,
         private val secondary: U?) {
@@ -11,6 +13,6 @@ data class Union<out T : Any, out U : Any> private constructor(
 
     fun hasPrimary(): Boolean = primary != null
 
-    fun getPrimary(): T = primary!!
-    fun getSecondary(): U = secondary!!
+    fun getPrimary(): T = primary?:throw MissingValueException("No primary value")
+    fun getSecondary(): U = secondary?: throw MissingValueException("No secondary value")
 }

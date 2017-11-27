@@ -7,5 +7,10 @@
             <class name="uk.co.jrtapsell.gitWrapper.TestGit"/>
         </classes>
     </test>
+    <test name="Union">
+        <classes>
+            <class name="uk.co.jrtapsell.gitWrapper.utils.TestUnion"/>
+        </classes>
+    </test>
 
 </suite>

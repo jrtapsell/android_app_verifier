@@ -60,7 +60,6 @@ class JarManipulator(val filename: String) {
         val process = run(true, "./", *parts)
         process.use {  }
         process.assertClosedCleanly()
-        println(outputJarfile)
         return JarManipulator(outputJarfile)
     }
 

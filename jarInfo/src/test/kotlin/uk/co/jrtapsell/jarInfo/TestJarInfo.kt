@@ -26,4 +26,18 @@ class TestJarInfo {
         val isSigned = !ret.isEmpty()
         Assert.assertFalse(shouldBeSigned xor isSigned)
     }
+
+    @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
+    fun `Checks that long empty dirs are empty`(tj: TestJar) {
+        val info = JarInfo(tj.path)
+        val ret = info.listDirectory("nx/nx/nx/nx/nx").toList()
+        Assert.assertEquals(ret.count(), 0)
+    }
+
+    @Test(dataProviderClass = JarProvider::class, dataProvider = "jars")
+    fun `Checks that short empty dirs are empty`(tj: TestJar) {
+        val info = JarInfo(tj.path)
+        val ret = info.listDirectory("nx").toList()
+        Assert.assertEquals(ret.count(), 0)
+    }
 }

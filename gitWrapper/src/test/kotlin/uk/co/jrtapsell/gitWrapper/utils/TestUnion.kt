@@ -23,4 +23,16 @@ class TestUnion {
         Assert.assertEquals(noVal.getSecondary(), 1)
     }
 
+    @Test(expectedExceptions = arrayOf(MissingValueException::class))
+    fun `Checks that a first valued union has no second value`() {
+        val union: DemoUnion = DemoUnion.makePrimary("A")
+        union.getSecondary()
+    }
+
+    @Test(expectedExceptions = arrayOf(MissingValueException::class))
+    fun `Checks that a second valued union has no first value`() {
+        val union: DemoUnion = DemoUnion.makeSecondary(1)
+        union.getPrimary()
+    }
+
 }

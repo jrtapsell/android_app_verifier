@@ -5,12 +5,15 @@ import org.testng.annotations.Test
 import java.io.File
 
 class TestInject {
-    fun withTempDir(block: ((String) -> String)->Unit) {
+    private fun withTempDir(block: ((String) -> String)->Unit) {
         val tempFile = File.createTempFile("testInject", ".jar")
         tempFile.delete()
         tempFile.mkdirs()
-        block({ tempFile.resolve(it).canonicalPath!! })
-        tempFile.deleteRecursively()
+        try {
+            block({ tempFile.resolve(it).canonicalPath!! })
+        } finally {
+            tempFile.deleteRecursively()
+        }
     }
 
     @Test
@@ -52,6 +55,14 @@ class TestInject {
             val injectedNames = injected.list()
             filenames.add("demo.txt")
             assertEquals(injectedNames, filenames)
+        }
+    }
+
+    @Test(expectedExceptions = arrayOf(AssertionError::class))
+    fun `Checks signed jars cannot be injected into`() {
+        withTempDir { tempDir ->
+            val base = JarManipulator("../demoJars/sqljdbc42.jar")
+            base.inject(tempDir("unsigned.jar"), "demo", "demo")
         }
     }
 }
