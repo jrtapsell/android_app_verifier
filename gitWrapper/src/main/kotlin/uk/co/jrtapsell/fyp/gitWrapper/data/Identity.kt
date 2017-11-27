@@ -22,6 +22,6 @@ class SignedIdentity(
     base: Identity,
     comment: String?,
     val status: SignatureStatus,
-    val gpgKey: String) : Identity(base.realName, base.email, comment) {
+    private val gpgKey: String) : Identity(base.realName, base.email, comment) {
     override fun toString(): String = "${super.toString()} signed [$status] by [$gpgKey]"
 }

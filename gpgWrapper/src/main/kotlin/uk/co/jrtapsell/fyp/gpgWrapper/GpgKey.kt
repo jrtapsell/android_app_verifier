@@ -9,17 +9,16 @@ class GpgKey(val armored: String) {
             return GpgKey(text)
         }
 
-        fun dearmor(text: String): String {
+        private fun dearmor(text: String): String {
             val process = run(true, "/", "gpg", "--dearmor", "-o-")
 
             text.lines().forEach { process.inputLine(it) }
             process.closeInput()
             process.use { }
 
-            val unarmored = process
+            return process
                 .filter { it.stream == Line.IOStream.OUT }
                 .joinToString(System.lineSeparator()) { it.text }
-            return unarmored
         }
 
         fun dearmor(vararg keys: GpgKey): String {

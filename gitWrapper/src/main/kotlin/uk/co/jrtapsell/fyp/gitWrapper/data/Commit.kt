@@ -8,14 +8,14 @@ import com.google.gson.JsonObject
  */
 data class Commit(
     val commitHash: Hash,
-    val parentHashes: List<Hash>,
-    val subject: String,
-    val author: Identity,
-    val committer: Identity,
+    private val parentHashes: List<Hash>,
+    private val subject: String,
+    private val author: Identity,
+    private val committer: Identity,
     val signer: SignedIdentity?) {
 
     companion object {
-        fun convert(
+        private fun convert(
                 commitHash: String,
                 parentHashes: String,
                 subject: String,

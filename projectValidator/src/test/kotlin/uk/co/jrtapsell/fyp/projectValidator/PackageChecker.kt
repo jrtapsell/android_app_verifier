@@ -4,9 +4,9 @@ import org.testng.annotations.Test
 import java.io.File
 
 class PackageChecker {
-    fun File.walkChildren(extension: String?, vararg specification: String?, block:(List<String>, File) -> Unit) {
+    private fun File.walkChildren(extension: String?, vararg specification: String?, block:(List<String>, File) -> Unit) {
         this.walk().onEnter {
-            it.name != "gitRepos"
+            it.name != "gitRepos" // Don't go deeper into repos forever
         }.forEach {
             val relative = it.relativeTo(this)
             if (it.isDirectory) return@forEach
@@ -54,17 +54,33 @@ class PackageChecker {
         }
     }
 
+    private fun forEachProject(block: (File) -> Unit) {
+        File("../").walkChildren("gradle", null) { _, file ->
+            if (file.name != "build.gradle") return@walkChildren
+            block(file.parentFile)
+        }
+    }
     @Test
     fun checkHasTests() {
-        File("../").walkChildren("gradle", null) { name, file ->
-            if (file.name != "build.gradle") return@walkChildren
-            val expectedTestFile = file
-                .parentFile
+        forEachProject { directory ->
+            val expectedTestFile = directory
                 .resolve("src")
                 .resolve("test")
                 .resolve("testng.xml")
             if (!expectedTestFile.exists()) {
-                throw AssertionError("${name[0]} has no testng.xml")
+                throw AssertionError("${directory.name} has no testng.xml")
+            }
+        }
+    }
+
+    @Test
+    fun checkHasNoJava() {
+        forEachProject {
+            if (it.resolve("src").resolve("main").resolve("java").exists()) {
+                throw AssertionError("${it.name} has src/main/java")
+            }
+            if (it.resolve("src").resolve("test").resolve("java").exists()) {
+                throw AssertionError("${it.name} has src/test/java")
             }
         }
     }

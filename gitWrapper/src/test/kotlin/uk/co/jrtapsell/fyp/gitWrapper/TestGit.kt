@@ -71,6 +71,6 @@ class TestGit {
 
     @Test
     fun `Prints the jvm info`() {
-        println(ManagementFactory.getRuntimeMXBean().getVmVersion())
+        println(ManagementFactory.getRuntimeMXBean().vmVersion)
     }
 }

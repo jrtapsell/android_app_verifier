@@ -2,7 +2,6 @@ package uk.co.jrtapsell.fyp.processTools
 
 import org.testng.Assert
 import org.testng.annotations.Test
-import uk.co.jrtapsell.fyp.processTools.TerminatedSource
 
 class TestTerminatedSource {
 

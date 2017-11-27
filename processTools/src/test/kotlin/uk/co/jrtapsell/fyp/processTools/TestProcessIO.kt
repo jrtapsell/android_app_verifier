@@ -7,7 +7,7 @@ import java.io.File
 /** Using https://www.tengio.com/blog/more-readable-tests-with-kotlin/ */
 class TestProcessIO {
 
-    fun timeLimit(minimumMS: Long, maximumMS: Long, block: () -> Unit) {
+    private fun timeLimit(minimumMS: Long, maximumMS: Long, block: () -> Unit) {
         val start = System.currentTimeMillis()
         block.invoke()
         val end = System.currentTimeMillis()

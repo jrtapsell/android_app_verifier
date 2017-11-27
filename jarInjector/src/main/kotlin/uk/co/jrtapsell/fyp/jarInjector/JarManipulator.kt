@@ -8,9 +8,9 @@ import java.util.jar.JarOutputStream
 
 import uk.co.jrtapsell.fyp.processTools.run
 
-class JarManipulator(val filename: String) {
+class JarManipulator(private val filename: String) {
 
-    fun withJarStreams(newFileName: String, block:(JarInputStream, JarOutputStream) -> Unit): JarManipulator {
+    private fun withJarStreams(newFileName: String, block:(JarInputStream, JarOutputStream) -> Unit): JarManipulator {
         JarInputStream(FileInputStream(filename)).use { input ->
             JarOutputStream(FileOutputStream(newFileName)).use { output ->
                 block(input, output)

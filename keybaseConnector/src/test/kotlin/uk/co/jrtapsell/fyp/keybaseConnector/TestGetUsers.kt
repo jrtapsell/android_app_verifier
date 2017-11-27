@@ -2,7 +2,6 @@ package uk.co.jrtapsell.fyp.keybaseConnector
 
 import org.testng.Assert.assertEquals
 import org.testng.annotations.Test
-import uk.co.jrtapsell.fyp.keybaseConnector.Keybase
 
 /**
  * @author James Tapsell

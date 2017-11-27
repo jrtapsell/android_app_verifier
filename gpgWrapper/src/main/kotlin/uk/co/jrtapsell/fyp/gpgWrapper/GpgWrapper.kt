@@ -70,8 +70,8 @@ object GpgWrapper {
         process.assertClosedCleanly()
         return lines.filter {
             it.stream == Line.IOStream.OUT
-        }.map {
+        }.joinToString(System.lineSeparator()) {
             it.text
-        }.joinToString(System.lineSeparator())
+        }
     }
 }

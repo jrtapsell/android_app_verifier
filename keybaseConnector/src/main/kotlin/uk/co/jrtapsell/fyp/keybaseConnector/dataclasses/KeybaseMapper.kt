@@ -7,12 +7,15 @@ import org.json.JSONObject
 object KeybaseMapper: ObjectMapper {
     override fun writeValue(value: Any?) = throw AssertionError()
 
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> Any.unsafeCast(type: Class<T>) = this as T
+
     override fun <T : Any> readValue(value: String?, valueType: Class<T>): T? {
         if (value == null) return null
         val data = JSONObject(value)
-        when {
-            valueType isA UserData::class -> return UserData.create(data) as? T
+        return when {
+            valueType isA UserData::class -> UserData.create(data)
             else -> throw AssertionError("Unknown type: ${valueType.canonicalName}")
-        }
+        }.unsafeCast(valueType)
     }
 }

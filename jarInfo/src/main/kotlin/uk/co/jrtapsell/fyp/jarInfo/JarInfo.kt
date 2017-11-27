@@ -12,8 +12,8 @@ data class Record(val entry: JarEntry, val path: List<String>, val getContents: 
         return "uk.co.jrtapsell.jarInfo.Record(${entry.name})"
     }
 }
-class JarInfo(val filePath: String) {
-    fun walk(): Sequence<Record> {
+class JarInfo(private val filePath: String) {
+    private fun walk(): Sequence<Record> {
         val jarFile = JarFile(filePath)
         return jarFile.entries().asSequence().map { jarEntry ->
             Record(
@@ -37,7 +37,7 @@ class JarInfo(val filePath: String) {
         }
     }
 
-    val noSign = Regex("""META-INF/[A-Z]+\.(RSA|DSA|SF)""")
+    private val noSign = Regex("""META-INF/[A-Z]+\.(RSA|DSA|SF)""")
 
     fun getTotalSigners(): List<List<X509Certificate>> {
         val signers = walk().filter { (entry, _, _) ->

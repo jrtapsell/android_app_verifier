@@ -9,9 +9,9 @@ import org.testng.annotations.Test
 typealias DemoUnion = Union<String, Int>
 class TestUnion {
 
-    val first: DemoUnion = Union.makePrimary("A")
-    val second: DemoUnion = Union.makePrimary("A")
-    val noVal: DemoUnion = Union.makeSecondary(1)
+    private val first: DemoUnion = Union.makePrimary("A")
+    private val second: DemoUnion = Union.makePrimary("A")
+    private val noVal: DemoUnion = Union.makeSecondary(1)
 
     @Test
     fun `Creates and checks simple unions`() {
