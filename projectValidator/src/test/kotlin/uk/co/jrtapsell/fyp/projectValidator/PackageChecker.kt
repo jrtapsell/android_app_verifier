@@ -76,11 +76,19 @@ class PackageChecker {
     @Test
     fun checkHasNoJava() {
         forEachProject {
-            if (it.resolve("src").resolve("main").resolve("java").exists()) {
-                throw AssertionError("${it.name} has src/main/java")
+            val mainJavaDir = it.resolve("src").resolve("main").resolve("java")
+            if (!mainJavaDir.exists()) {
+                throw AssertionError("${it.name} has no src/main/java")
             }
-            if (it.resolve("src").resolve("test").resolve("java").exists()) {
-                throw AssertionError("${it.name} has src/test/java")
+            if (mainJavaDir.list().isNotEmpty()) {
+                throw AssertionError("${it.name} contains main java code")
+            }
+            val testJavaDir = it.resolve("src").resolve("test").resolve("java")
+            if (!testJavaDir.exists()) {
+                throw AssertionError("${it.name} has no src/test/java")
+            }
+            if (testJavaDir.list().isNotEmpty()) {
+                throw AssertionError("${it.name} contains test java code")
             }
         }
     }
