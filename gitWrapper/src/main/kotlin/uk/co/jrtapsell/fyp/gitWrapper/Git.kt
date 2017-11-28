@@ -37,7 +37,7 @@ class Git(private val directory: String) {
         val errLines = back.filter { !it.hasPrimary() }.map { it.getSecondary() }
         if (errLines.isNotEmpty()) {
             val message = errLines.joinToString("\n").trim()
-            if (message == "fatal: Not a git repository (or any of the parent directories): .git") {
+            if (message.startsWith("fatal: Not a git repository")) {
                 throw GitException("Couldn't list commits, $directory is not a git repo")
             }
             throw GitException("Couldn't list commits, git output error message:\n$message")
