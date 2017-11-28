@@ -77,11 +77,11 @@ class PackageChecker {
     fun checkHasNoJava() {
         forEachProject {
             val mainJavaDir = it.resolve("src").resolve("main").resolve("java")
-            if (mainJavaDir.exists() and mainJavaDir.list().isNotEmpty()) {
+            if (mainJavaDir.exists() && mainJavaDir.list().isNotEmpty()) {
                 throw AssertionError("${it.name} contains main java code")
             }
             val testJavaDir = it.resolve("src").resolve("test").resolve("java")
-            if (testJavaDir.exists() and testJavaDir.list().isNotEmpty()) {
+            if (testJavaDir.exists() && testJavaDir.list().isNotEmpty()) {
                 throw AssertionError("${it.name} contains test java code")
             }
         }
