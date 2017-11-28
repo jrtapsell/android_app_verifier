@@ -5,8 +5,7 @@ import uk.co.jrtapsell.fyp.gpgWrapper.GpgKey
 
 data class UserData(val id: String, val usernames: Map<String, String>, val keys: List<GpgKey>) {
     companion object {
-        fun create(data: JSONObject): UserData {
-            val them = data.getJSONObject("them")
+        fun create(them: JSONObject): UserData? {
             val usenames = mutableMapOf(
                     "keybaseConnector" to them.getJSONObject("basics").getString("username_cased")!!
             )

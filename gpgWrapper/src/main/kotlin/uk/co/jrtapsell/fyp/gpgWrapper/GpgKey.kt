@@ -3,7 +3,7 @@ package uk.co.jrtapsell.fyp.gpgWrapper
 import uk.co.jrtapsell.fyp.processTools.Line
 import uk.co.jrtapsell.fyp.processTools.run
 
-class GpgKey(val armored: String) {
+data class GpgKey(val armored: String) {
     companion object {
         fun loadArmored(text: String): GpgKey {
             return GpgKey(text)
