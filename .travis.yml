@@ -6,3 +6,5 @@ jdk:
 - oraclejdk8
 env:
 - JRT_GPG_PASSWORD=password
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
