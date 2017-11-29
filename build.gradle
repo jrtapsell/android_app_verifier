@@ -1,3 +1,8 @@
+plugins {
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.7.1'
+}
+
 allprojects {
     group 'uk.co.jrtapsell'
     version '1.0-SNAPSHOT'

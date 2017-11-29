@@ -6,3 +6,6 @@ jdk:
 - oraclejdk8
 env:
 - JRT_GPG_PASSWORD=password
+
+after_success:
+- ./gradlew jacocoTestReport coveralls
