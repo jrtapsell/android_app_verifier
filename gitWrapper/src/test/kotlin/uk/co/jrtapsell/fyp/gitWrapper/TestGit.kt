@@ -33,7 +33,7 @@ class TestGit {
 
     @Test
     fun `Validates known facts about this repo`() {
-        val repository = Git("./")
+        val repository = Git("../gitRepos/android_app_verifier")
         val commits = repository.listCommits()
         val genesis = commits.last()
         Assert.assertEquals(genesis.commitHash.value(), "0b764cd867bff6e471cca0ab009d4874c2b85819")
