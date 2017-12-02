@@ -3,6 +3,7 @@ apt-get install gnupg2
 cd setup
 
 curl https://keybase.io/jrtapsell/pgp_keys.asc | gpg --import
+curl https://jrtapsell.keybase.pub/signedkeys/public | gpg --import
 curl https://github.com/web-flow.gpg | gpg --import
 gpg --import-ownertrust trusts.txt
 
