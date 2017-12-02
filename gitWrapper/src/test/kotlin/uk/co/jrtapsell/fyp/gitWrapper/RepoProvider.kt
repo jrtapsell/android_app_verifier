@@ -9,7 +9,7 @@ data class Repo(val path: String, val state: SignatureStatus)
 val TEST_REPOS = listOf(
         Repo("../gitRepos/android_app_verifier", SignatureStatus.GOOD),
         Repo("../gitRepos/signedRepo", SignatureStatus.GOOD),
-        Repo("../gitRepos/wordpressSitesListing", SignatureStatus.UNSIGNED),
+        Repo("../gitRepos/wordpressSitesListing", SignatureStatus.GOOD),
         Repo("../gitRepos/personal", SignatureStatus.UNSIGNED)
 )
 

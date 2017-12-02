@@ -2,8 +2,8 @@
 apt-get install gnupg2
 cd setup
 
-gpg --import j1.asc
-gpg --import j2.asc
+curl https://keybase.io/jrtapsell/pgp_keys.asc | gpg --import
+curl https://github.com/web-flow.gpg | gpg --import
 gpg --import-ownertrust trusts.txt
 
 gpg --gen-key --batch setup.gpg
