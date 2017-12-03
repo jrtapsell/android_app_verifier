@@ -32,4 +32,13 @@ class TestSignedMessage {
         val signature = File("../gpgTestFiles/trusted/message.txt.asc").inputStream()
         evil.verifySigned(signature, message)
     }
+
+    /** Tries to validate rubbish. */
+    @Test(expectedExceptions = arrayOf(KeybaseException::class))
+    fun `Checks that rubbish messages are not allowed`() {
+        val evil = KeybaseVerifier("evil_morty")
+        val message = File("../gpgTestFiles/garbage/message.txt").inputStream()
+        val signature = File("../gpgTestFiles/garbage/message.txt.asc").inputStream()
+        evil.verifySigned(signature, message)
+    }
 }
