@@ -6,18 +6,19 @@ import java.io.File
 
 class PackageChecker {
     private fun File.walkChildren(extension: String?, vararg specification: String?, block:(List<String>, File) -> Unit) {
-        this.walk().onEnter {
+        val localFiles = this.walk().onEnter {
             it.name != "gitRepos" // Don't go deeper into repos forever
-        }.forEach {
+        }
+        for (it in localFiles) {
             val relative = it.relativeTo(this)
-            if (it.isDirectory) return@forEach
-            if (extension != null && it.extension != extension) return@forEach
+            if (it.isDirectory) continue
+            if (extension != null && it.extension != extension) continue
             val segments = relative.toString().split("/")
-            if (segments.size <= specification.size) return@forEach
+            if (segments.size <= specification.size) continue
             for (i in specification.indices) {
                 val specValue = specification[i] ?: continue
                 val segValue = segments[i]
-                if (specValue != segValue) return@forEach
+                if (specValue != segValue) continue
             }
             block(segments, it)
         }
