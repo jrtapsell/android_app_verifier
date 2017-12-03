@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.fyp.processTools.extensions
 
+/** Adds extension methods for thread management. */
 object _Thread {
     /**
      * Similar to the thread method in kotlin, except with a few extra features

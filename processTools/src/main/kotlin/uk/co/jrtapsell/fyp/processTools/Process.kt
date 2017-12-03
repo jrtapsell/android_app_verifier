@@ -29,6 +29,7 @@ class OutputSequence(
 
     private val lineLog = mutableListOf<Line>()
 
+    /** Writes a line to the process' input stream. */
     fun inputLine(line: String) = input.println(line)
 
     /** Waits for the process to stop, killing it if asked to. */
@@ -93,10 +94,12 @@ class OutputSequence(
     /** Represents the OutputSource as a string. */
     override fun toString() = "Process P$hashCode"
 
+    /** Closes the input of the process. */
     fun closeInput() {
         input.close()
     }
 
+    /** Makes sure the process exited with 0, and throws an exception otherwise. */
     fun assertClosedCleanly() {
         if (exitCode != 0) {
             val errorMessage = lineLog.joinToString(System.lineSeparator()){ it.text }

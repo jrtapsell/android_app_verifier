@@ -9,11 +9,13 @@ import java.util.jar.JarFile
 
 /** Represents a record in a JAR file. */
 data class Record(val entry: JarEntry, val path: List<String>, val getContents: ()-> InputStream) {
+    /** Represents this object as a string. */
     override fun toString(): String {
         return "uk.co.jrtapsell.jarInfo.Record(${entry.name})"
     }
 }
 
+/** Gives information about the JAR at the given filepath. */
 class JarInfo(private val filePath: String) {
 
     private fun walk(): Sequence<Record> {

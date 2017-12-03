@@ -7,9 +7,12 @@ import uk.co.jrtapsell.fyp.processTools.run
 import uk.co.jrtapsell.fyp.gitWrapper.utils.Union
 import java.io.IOException
 
+/** Alias used the union of either an error string or a commit. */
 typealias CommitOrString = Union<Commit, String>
 
+/** Wraps around the git executable. */
 class Git(private val directory: String) {
+    /** Lists all commits in the current repository. */
     fun listCommits(): List<Commit> {
         val process = try {
             run(
@@ -48,6 +51,7 @@ class Git(private val directory: String) {
         return back.map { it.getPrimary() }
     }
 
+    /** Gets the weakest state of the commits current repository. */
     fun getState(): SignatureStatus = this.listCommits()
             .map { it.signer?.status?: SignatureStatus.UNSIGNED }
             .max() ?: SignatureStatus.UNSIGNED

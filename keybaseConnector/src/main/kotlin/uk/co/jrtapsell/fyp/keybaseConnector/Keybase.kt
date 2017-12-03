@@ -7,6 +7,7 @@ import uk.co.jrtapsell.fyp.keybaseConnector.dataclasses.UsersData
 
 import uk.co.jrtapsell.fyp.keybaseConnector.VerificationType.*
 
+/** Acts as a facade around the Keybase API. */
 object Keybase {
 
     private val baseURL = "https://keybase.io/_/api/1.0/user/lookup.json"

@@ -57,7 +57,8 @@ data class Commit(
                     committer,
                     signIdent)
         }
-        val PRETTY_STRING = "{" +
+
+        private val PRETTY_STRING = "{" +
                 "commitHash=\"%H\"," +
                 "parentHashes=\"%P\"," +
                 "subject=\"%s\"," +
@@ -70,6 +71,7 @@ data class Commit(
                 "status=\"%G?\"" +
                 "}"
 
+        /** Converts the JSON representation of a commit into a Commit object. */
         fun convert(raw: String): Commit {
             val g = Gson().fromJson(raw, JsonObject::class.java)
             return convert(
@@ -87,6 +89,7 @@ data class Commit(
         }
     }
 
+    /** Represents this commit as a String. */
     override fun toString() = """
         | ┏━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         | ┃ Hash        │ $commitHash
