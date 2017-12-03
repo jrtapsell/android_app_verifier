@@ -61,6 +61,7 @@ enum class SignatureStatus(val code: Char) {
     
     companion object {
         private val CODES = values().associate { it.code to it }
+        /** Gets the signature status for the given letter. */
         fun getForLetter(code: Char): SignatureStatus {
             return CODES[code] ?: throw AssertionError("Unknown code: $code")
         }
