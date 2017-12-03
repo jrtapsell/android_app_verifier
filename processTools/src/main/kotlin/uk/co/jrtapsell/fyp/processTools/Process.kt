@@ -115,10 +115,28 @@ class OutputSequence(
  * @param command
  *   The command to run
  */
+fun run(waitFor: Boolean, workingDir: String, command: List<String>): OutputSequence {
+    val process = ProcessBuilder()
+        .directory(File(workingDir))
+        .command(command)
+        .start()!!
+    return OutputSequence(process, waitFor)
+}
+
+/**
+ * Starts a process with the given parameters
+ *
+ * @param waitFor
+ *   If true, closing waits for the process to halt, otherwise it just kills it
+ * @param workingDir
+ *   The working directory for the process
+ * @param command
+ *   The command to run
+ */
 fun run(waitFor: Boolean, workingDir: String, vararg command: String): OutputSequence {
     val process = ProcessBuilder()
             .directory(File(workingDir))
-            .command(*command)
+            .command(command.toList())
             .start()!!
     return OutputSequence(process, waitFor)
 }

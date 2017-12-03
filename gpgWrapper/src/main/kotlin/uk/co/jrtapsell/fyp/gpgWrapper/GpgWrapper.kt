@@ -11,24 +11,24 @@ class MockCloseable: AutoCloseable {
 }
 
 object GpgWrapper {
-    fun validate(message: String, signature: String, vararg signatureKey: GpgKey = arrayOf()): SignatureStatus {
+    fun validate(message: String, signature: String, signatureKey: List<GpgKey> = listOf()): SignatureStatus {
 
         val (command, key) = if (signatureKey.isEmpty()) {
-            arrayOf("gpg",
+            listOf("gpg",
                     "-d") to MockCloseable()
         } else {
             val temp = File.createTempFile("key", ".asc")
-            val darmored = GpgKey.dearmor(*signatureKey)
+            val darmored = GpgKey.dearmor(signatureKey)
             temp.writeText(darmored)
             println(temp.canonicalPath)
-            arrayOf("gpg",
+            listOf("gpg",
                     "--no-default-keyring",
                     "--keyring",
                     temp.canonicalPath,
                     "-d") to AutoCloseable { temp.delete() }
         }
 
-        val process = run(true, "/", *command)
+        val process = run(true, "/", command)
 
         signature.lines().forEach {
             process.inputLine(it)

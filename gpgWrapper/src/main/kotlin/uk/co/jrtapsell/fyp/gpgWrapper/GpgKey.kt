@@ -24,5 +24,9 @@ data class GpgKey(val armored: String) {
         fun dearmor(vararg keys: GpgKey): String {
             return dearmor(keys.joinToString(System.lineSeparator()) { it.armored })
         }
+
+        fun dearmor(keys: List<GpgKey>): String {
+            return dearmor(keys.joinToString(System.lineSeparator()) { it.armored })
+        }
     }
 }
