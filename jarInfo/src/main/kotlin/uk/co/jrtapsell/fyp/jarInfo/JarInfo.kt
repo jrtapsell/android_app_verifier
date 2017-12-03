@@ -7,12 +7,15 @@ import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
+/** Represents a record in a JAR file. */
 data class Record(val entry: JarEntry, val path: List<String>, val getContents: ()-> InputStream) {
     override fun toString(): String {
         return "uk.co.jrtapsell.jarInfo.Record(${entry.name})"
     }
 }
+
 class JarInfo(private val filePath: String) {
+
     private fun walk(): Sequence<Record> {
         val jarFile = JarFile(filePath)
         return jarFile.entries().asSequence().map { jarEntry ->
@@ -23,10 +26,13 @@ class JarInfo(private val filePath: String) {
             )
         }
     }
+
+    /** Walks over all the files in the jar. */
     fun walkFiles(): Sequence<Record> {
         return walk().filter { (entry, _, _) -> !entry.isDirectory }
     }
 
+    /** Walks over the files in a given directory. */
     fun listDirectory(vararg path: String): Sequence<Record> {
         return walk().filter { (_, item, _) ->
             if (path.size > item.size){
@@ -39,6 +45,10 @@ class JarInfo(private val filePath: String) {
 
     private val noSign = Regex("""META-INF/[A-Z]+\.(RSA|DSA|SF)""")
 
+    /** Gets the signers who have signed every entry that needs signing in the JAR file.
+     *
+     * This excludes the signature file, and also the directories.
+     */
     fun getTotalSigners(): List<List<X509Certificate>> {
         val signers = walk().filter { (entry, _, _) ->
             !entry.isDirectory && !noSign.matches(entry.name)
@@ -78,7 +88,6 @@ class JarInfo(private val filePath: String) {
         return valid.toMutableList()
     }
 
-    /** Checks if a certificate is valid for code signing purposes. */
     private fun X509Certificate.checkCanCodeSign(): Boolean {
         val extendedKeyUsage = extendedKeyUsage ?: return false
         val signer = "1.3.6.1.5.5.7.3.3" in extendedKeyUsage
