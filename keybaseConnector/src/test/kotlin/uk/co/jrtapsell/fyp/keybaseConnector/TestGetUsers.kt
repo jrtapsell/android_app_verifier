@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.fyp.keybaseConnector
 
+import org.testng.Assert
 import org.testng.Assert.assertEquals
 import org.testng.annotations.Test
 import uk.co.jrtapsell.fyp.keybaseConnector.utils.assertAllEqual
@@ -7,6 +8,8 @@ import uk.co.jrtapsell.fyp.keybaseConnector.utils.assertEquals
 import uk.co.jrtapsell.fyp.keybaseConnector.utils.only
 
 /**
+ * Tests getting users from keybase.
+ *
  * @author James Tapsell
  */
 class TestGetUsers {
@@ -28,6 +31,11 @@ class TestGetUsers {
         val domain = Keybase.getByDomain("jrtapsell.co.uk")!!.only()
         val website = Keybase.getByDomain("www.jrtapsell.co.uk")!!.only()
         assertAllEqual(keybase, github, domain, website)
+    }
+
+    @Test
+    fun `Tests getting a missing user`() {
+        Assert.assertEquals(Keybase.getByUsername("never_exists"), null)
     }
 
 }
