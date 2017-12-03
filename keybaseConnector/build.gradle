@@ -1,7 +1,15 @@
 group 'uk.co.jrtapsell'
 version '1.0-SNAPSHOT'
 
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
 dependencies {
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-    compile project(':gpgWrapper')
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile 'org.bouncycastle:bcprov-jdk15on:1.57'
+    compile 'org.bouncycastle:bcpg-jdk15on:1.57'
+    compile group: 'fun.mike', name: 'bouncy-gpg-alpha', version: '0.0.1'
 }

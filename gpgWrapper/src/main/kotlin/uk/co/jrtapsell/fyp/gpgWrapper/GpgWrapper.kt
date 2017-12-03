@@ -18,7 +18,9 @@ object GpgWrapper {
                     "-d") to MockCloseable()
         } else {
             val temp = File.createTempFile("key", ".asc")
-            temp.appendText(GpgKey.dearmor(*signatureKey))
+            val darmored = GpgKey.dearmor(*signatureKey)
+            temp.writeText(darmored)
+            println(temp.canonicalPath)
             arrayOf("gpg",
                     "--no-default-keyring",
                     "--keyring",
@@ -35,6 +37,9 @@ object GpgWrapper {
 
         process.use {}
         val lines = process.toList()
+        for (i in lines) {
+            println(i)
+        }
         key.close()
 
         val signedMessage = lines.filter { it.stream == Line.IOStream.OUT }.map { it.text }

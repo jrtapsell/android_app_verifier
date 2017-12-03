@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="uk.co.jrtapsell.fyp.keybaseConnector.Keybase">
+<suite name="KeybaseConnector">
 
     <test name="Users">
         <classes>
@@ -11,6 +11,11 @@
     <test name="Signatures">
         <classes>
             <class name="uk.co.jrtapsell.fyp.keybaseConnector.TestSignedMessage"/>
+        </classes>
+    </test>
+    <test name="badRequests">
+        <classes>
+            <class name="uk.co.jrtapsell.fyp.keybaseConnector.TestBadRequests"/>
         </classes>
     </test>
 </suite>

@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 
 /**
+ * Represents a commit in the repository.
+ *
  * @author James Tapsell
  */
 data class Commit(

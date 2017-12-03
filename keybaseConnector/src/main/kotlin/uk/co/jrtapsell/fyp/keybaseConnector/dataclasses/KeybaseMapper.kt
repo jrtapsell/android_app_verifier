@@ -4,6 +4,7 @@ import com.mashape.unirest.http.ObjectMapper
 import org.json.JSONArray
 import uk.co.jrtapsell.fyp.keybaseConnector.extensions.isA
 import org.json.JSONObject
+import uk.co.jrtapsell.fyp.keybaseConnector.KeybaseException
 
 object KeybaseMapper: ObjectMapper {
     override fun writeValue(value: Any?) = throw AssertionError()
@@ -14,6 +15,11 @@ object KeybaseMapper: ObjectMapper {
     override fun <T : Any> readValue(value: String?, valueType: Class<T>): T? {
         if (value == null) return null
         val data = JSONObject(value)
+        val status = data.getJSONObject("status")!!
+        if (status.getInt("code") == 205 && status.getString("name") == "NOT_FOUND") {
+            return null
+        }
+        KeybaseException.validateResponse(data)
         return when {
             valueType isA UserData::class -> {
                 if (!data.has("them")) return null
