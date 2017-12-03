@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.fyp.projectValidator
 
+import org.testng.Assert
 import org.testng.annotations.Test
 import java.io.File
 
@@ -24,7 +25,7 @@ class PackageChecker {
     }
 
     @Test
-    fun checkFolders() {
+    fun `Checks that kotlin files are in the right package`() {
         File("../").walkChildren("kt", null, "src", null, "kotlin" ) { name, file ->
             if (name[4] != "uk") throw AssertionError("uk check failed $file")
             if (name[5] != "co") throw AssertionError("co check failed $file")
@@ -35,7 +36,7 @@ class PackageChecker {
     }
 
     @Test
-    fun checkHeaders() {
+    fun `Checks the package line of files is correct`() {
         val headerRegex = Regex("""package ([A-z]+(?:\.[A-z]+)+)""")
         File("../").walkChildren("kt", null, "src", null, "kotlin" ) { name, file ->
             val header = file.bufferedReader().use { it.readLine() }!!
@@ -61,7 +62,7 @@ class PackageChecker {
         }
     }
     @Test
-    fun checkHasTests() {
+    fun `Checks all projects have testng setup`() {
         forEachProject { directory ->
             val expectedTestFile = directory
                 .resolve("src")
@@ -74,7 +75,7 @@ class PackageChecker {
     }
 
     @Test
-    fun checkHasNoJava() {
+    fun `Check there are no java files in the project`() {
         forEachProject {
             val mainJavaDir = it.resolve("src").resolve("main").resolve("java")
             if (mainJavaDir.exists() && mainJavaDir.list().isNotEmpty()) {
@@ -83,6 +84,34 @@ class PackageChecker {
             val testJavaDir = it.resolve("src").resolve("test").resolve("java")
             if (testJavaDir.exists() && testJavaDir.list().isNotEmpty()) {
                 throw AssertionError("${it.name} contains test java code")
+            }
+        }
+    }
+
+    @Test
+    fun `Check test names are using the descriptive form`() {
+        val testRegex = Regex("""@Test(\([^)]+\))?\s+fun ([^(]+)""")
+        val noDataProvider = Regex("""`[A-Z][a-z]+( [a-z0-9A-Z\-']+,?){3,}`""")
+        val dataProvider = Regex("""`[A-Z][a-z]+( [a-z0-9A-Z\-']+,?){3,} `""")
+        File("../").walkChildren("kt", null, "src", "test") { path, file ->
+            val text = file.readText()
+            testRegex.findAll(text).forEach {
+                val annotationParams = it.groups[1]?.value
+                val (targetRegex, nameGroup) = if (annotationParams?.contains("dataProvider") == true) {
+                    dataProvider to it.groups[2]
+                }
+                else {
+                    noDataProvider to it.groups[2]
+                }
+                val name = nameGroup!!.value
+                if (targetRegex.matchEntire(name) == null) {
+                    Assert.fail("""
+                            |Name of {$path | $name} is wrong:
+                            |Expected: ${targetRegex.pattern}
+                            |Actual  : $name
+                            |Based on: $annotationParams
+                    """.trimMargin())
+                }
             }
         }
     }

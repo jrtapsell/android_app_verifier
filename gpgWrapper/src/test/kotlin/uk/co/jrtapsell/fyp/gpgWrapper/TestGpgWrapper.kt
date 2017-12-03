@@ -30,7 +30,7 @@ class TestGpgWrapper {
     }
 
     @Test(dataProvider = "messages")
-    fun `Checks various signatures`(test: Testmessage) {
+    fun `Checks various stored signatures `(test: Testmessage) {
         val message = getResource(test.messagePath)
         val signature = getResource(test.sigPath)
         val sigState = GpgWrapper.validate(message, signature)
