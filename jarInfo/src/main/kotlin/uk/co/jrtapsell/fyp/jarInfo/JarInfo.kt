@@ -56,8 +56,11 @@ class JarInfo(private val filePath: String) {
 
         val certs = mutableMapOf<String, List<X509Certificate>>()
         signers.forEach {
-            it.second.forEach {
-                val certChain = it.signerCertPath.certificates.map { it as X509Certificate }
+            it.second
+                .forEach {
+                val certChain = it.signerCertPath.certificates
+                    .filter { it is X509Certificate }
+                    .map { it as X509Certificate }
                 val head = certChain[0].hexify()
                 certs[head] = certChain
             }
@@ -71,12 +74,15 @@ class JarInfo(private val filePath: String) {
         val signers = it.second
         val valid = signers
             .mapNotNull { it.signerCertPath.certificates[0] as? X509Certificate }
-            .filter { head ->
-                val extendedKeyUsage = head.extendedKeyUsage ?: return@filter false
-                val signer = "1.3.6.1.5.5.7.3.3" in extendedKeyUsage
-                val current = head.notAfter.after(Date()) && head.notBefore.before(Date())
-                signer && current
-            }
+            .filter { it.checkCanCodeSign() }
         return valid.toMutableList()
+    }
+
+    /** Checks if a certificate is valid for code signing purposes. */
+    private fun X509Certificate.checkCanCodeSign(): Boolean {
+        val extendedKeyUsage = extendedKeyUsage ?: return false
+        val signer = "1.3.6.1.5.5.7.3.3" in extendedKeyUsage
+        val current = notAfter.after(Date()) && notBefore.before(Date())
+        return signer && current
     }
 }
