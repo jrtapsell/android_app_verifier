@@ -58,7 +58,8 @@ data class Commit(
                     signIdent)
         }
 
-        private val PRETTY_STRING = "{" +
+        /** The git format to use to get JSON output. */
+        val PRETTY_STRING = "{" +
                 "commitHash=\"%H\"," +
                 "parentHashes=\"%P\"," +
                 "subject=\"%s\"," +
