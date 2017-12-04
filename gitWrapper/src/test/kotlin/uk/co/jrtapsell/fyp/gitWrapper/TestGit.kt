@@ -11,17 +11,14 @@ import java.lang.management.ManagementFactory
  */
 class TestGit {
 
-    @DataProvider(name = "repos")
-    fun listRepos(): Array<Array<String>> = arrayOf(
-            "./"
-    ).map { arrayOf(it) }.toTypedArray()
-
-    @Test(dataProvider = "repos")
+    /** Tries to load each of the test repositories. */
+    @Test(dataProvider = "repos", dataProviderClass = RepoProvider::class)
     fun `Constructs a repo for a known path `(path: String) {
         Git(path)
     }
 
-    @Test(dataProvider = "repos")
+    /** Lists all of the commits in each of the test repos. */
+    @Test(dataProvider = "repos", dataProviderClass = RepoProvider::class)
     fun `Lists commits for the given repo `(path: String) {
         val repository = Git(path)
         val commits = repository.listCommits()
@@ -31,6 +28,7 @@ class TestGit {
         }
     }
 
+    /** Checks that the genesis hash of this repo is correct. */
     @Test
     fun `Validates known facts about this repo`() {
         val repository = Git("../gitRepos/android_app_verifier")
@@ -40,6 +38,7 @@ class TestGit {
         Assert.assertEquals(genesis.commitHash.last(6), "b85819")
     }
 
+    /** Tries to load a file as a repo. */
     @Test(
             expectedExceptions = arrayOf(GitException::class),
             expectedExceptionsMessageRegExp = "Couldn't list commits, /dev/null is not a directory"
@@ -49,6 +48,7 @@ class TestGit {
         repo.listCommits()
     }
 
+    /** Tries to load a directory as a repo. */
     @Test(
             expectedExceptions = arrayOf(GitException::class),
             expectedExceptionsMessageRegExp = "Couldn't list commits, /tmp is not a git repo"
@@ -58,19 +58,16 @@ class TestGit {
         repo.listCommits()
     }
 
+    /** Checks the status of the current repo. */
     @Test
     fun `Checks the local repo is securely signed`() {
         val repo = Git("./")
         Assert.assertEquals(repo.getState(), SignatureStatus.GOOD)
     }
 
+    /** Checks each of the test repos have the expected status values. */
     @Test(dataProviderClass = RepoProvider::class, dataProvider = "repos")
     fun `Checks the status of known repos `(repo: Repo) {
         Assert.assertEquals(Git(repo.path).getState(), repo.state)
-    }
-
-    @Test
-    fun `Prints the jvm info`() {
-        println(ManagementFactory.getRuntimeMXBean().vmVersion)
     }
 }

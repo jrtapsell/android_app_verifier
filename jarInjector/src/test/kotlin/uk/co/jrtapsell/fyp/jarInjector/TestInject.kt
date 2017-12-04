@@ -4,6 +4,7 @@ import org.testng.Assert.*
 import org.testng.annotations.Test
 import java.io.File
 
+/** Tests injecting into a JAR file. */
 class TestInject {
     private fun withTempDir(block: ((String) -> String)->Unit) {
         val tempFile = File.createTempFile("testInject", ".jar")
@@ -16,6 +17,7 @@ class TestInject {
         }
     }
 
+    /** Takes an unsigned jar, signs it and then verifies that the resulting jar is treated as signed. */
     @Test
     fun `Signs an unsigned jar`() {
         withTempDir { tempDir ->
@@ -27,6 +29,7 @@ class TestInject {
         }
     }
 
+    /** Takes a signed jar and removes its signature, then validates it is no longer treated as signed. */
     @Test
     fun `Unsigns a signed jar`() {
         withTempDir { tempDir ->
@@ -38,6 +41,7 @@ class TestInject {
         }
     }
 
+    /** Adds a file to a JAR, and then validates the JAR contains the same files, and the new one aswell. */
     @Test
     fun `Adds a file to a jar`() {
         withTempDir { tempDir ->
@@ -58,6 +62,7 @@ class TestInject {
         }
     }
 
+    /** Checks that an error is thrown if a set of operations would lead to a broken signature. */
     @Test(expectedExceptions = arrayOf(AssertionError::class))
     fun `Checks signed jars cannot be injected into`() {
         withTempDir { tempDir ->

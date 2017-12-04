@@ -8,6 +8,7 @@ import java.util.jar.JarOutputStream
 
 import uk.co.jrtapsell.fyp.processTools.run
 
+/** Allows for modification of JAR files. */
 class JarManipulator(private val filename: String) {
 
     private fun withJarStreams(newFileName: String, block:(JarInputStream, JarOutputStream) -> Unit): JarManipulator {
@@ -20,9 +21,11 @@ class JarManipulator(private val filename: String) {
         return JarManipulator(newFileName)
     }
 
+    /** Gets the info of the current JAR. */
     val info: JarInfo
         get() = JarInfo(filename)
 
+    /** Injects a file into the given jar, storing the output at the chosen location. */
     fun inject(
         outputJarfile: String,
         fileName: String,
@@ -42,6 +45,7 @@ class JarManipulator(private val filename: String) {
         }
     }
 
+    /** Signs the jar and stores the output at the given location. */
     fun sign(outputJarfile: String): JarManipulator {
 
         val parts = arrayOf(
@@ -63,6 +67,7 @@ class JarManipulator(private val filename: String) {
         return JarManipulator(outputJarfile)
     }
 
+    /** Unsigns the JAR and stores the output at the given location. */
     fun unsign(outputJarfile: String): JarManipulator {
 
         fun copyIfNotSignature(input: JarInputStream, output: JarOutputStream, entry: JarEntry) {

@@ -4,13 +4,26 @@ import uk.co.jrtapsell.fyp.processTools.Line
 import uk.co.jrtapsell.fyp.processTools.run
 import java.io.File
 
+/** Represents the status of a signature. */
 data class SignatureStatus(val valid: Boolean, val trusted: Boolean)
 
+/** Mock closeable that does nothing. */
 class MockCloseable: AutoCloseable {
+    /** Does nothing. */
     override fun close() {}
 }
 
+/** Wraps the GPG executable and allows operations to be performed on it. */
 object GpgWrapper {
+    /** Validates that a message was signed with a given key.
+     *
+     * @param message
+     *  The message to validate
+     * @param signature
+     *  The signature to validate
+     * @param signatureKey
+     *  The keyring to use for validation (or null to use the system keyring)
+     */
     fun validate(message: String, signature: String, signatureKey: List<GpgKey> = listOf()): SignatureStatus {
 
         val (command, key) = if (signatureKey.isEmpty()) {
@@ -58,6 +71,7 @@ object GpgWrapper {
         return SignatureStatus(sameMessage && signatureState, sameMessage && trust)
     }
 
+    /** Signs a message with the default key. */
     fun sign(message: String): String {
         val command = arrayOf(
                 "gpg",

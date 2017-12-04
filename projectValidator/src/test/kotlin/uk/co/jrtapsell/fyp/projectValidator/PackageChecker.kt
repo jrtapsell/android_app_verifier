@@ -4,6 +4,7 @@ import org.testng.Assert
 import org.testng.annotations.Test
 import java.io.File
 
+/** Validates the project. */
 class PackageChecker {
     private fun File.walkChildren(extension: String?, vararg specification: String?, block:(List<String>, File) -> Unit) {
         val localFiles = this.walk().onEnter {
@@ -25,6 +26,7 @@ class PackageChecker {
 
     }
 
+    /** Checks all the packages are correct. */
     @Test
     fun `Checks that kotlin files are in the right package`() {
         File("../").walkChildren("kt", null, "src", null, "kotlin" ) { name, file ->
@@ -36,6 +38,10 @@ class PackageChecker {
         }
     }
 
+    /** Checks the package lines are present.
+     *
+     * This is needed because kotlin allows files in a different place to their package.
+     */
     @Test
     fun `Checks the package line of files is correct`() {
         val headerRegex = Regex("""package ([A-z]+(?:\.[A-z]+)+)""")
@@ -62,6 +68,8 @@ class PackageChecker {
             block(file.parentFile)
         }
     }
+
+    /** Checks that all modules have a testng.xml file. */
     @Test
     fun `Checks all projects have testng setup`() {
         forEachProject { directory ->
@@ -75,6 +83,7 @@ class PackageChecker {
         }
     }
 
+    /** Checks I haven't added java files. */
     @Test
     fun `Check there are no java files in the project`() {
         forEachProject {
@@ -89,6 +98,7 @@ class PackageChecker {
         }
     }
 
+    /** Checks that no test have Java style names. */
     @Test
     fun `Check test names are using the descriptive form`() {
         val testRegex = Regex("""@Test(\([^)]+\))?\s+fun ([^(]+)""")
