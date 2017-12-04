@@ -32,9 +32,7 @@ class Hash(private val data:ByteArray) {
 
         if (other !is Hash) return false
 
-        if (!Arrays.equals(data, other.data)) return false
-
-        return true
+        return Arrays.equals(data, other.data)
     }
 
     /** Hashes this hash. */
