@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.fyp.gitWrapper.data
 
+import uk.co.jrtapsell.fyp.gitWrapper.GitException
 import java.util.*
 
 /**
@@ -42,8 +43,8 @@ class Hash(private val data:ByteArray) {
 
     companion object {
         /** Reads the hash from a string. */
-        fun fromString(hash: String): Hash? {
-            if (hash.isBlank()) return null
+        fun fromString(hash: String): Hash {
+            if (hash.isBlank()) throw GitException("Missing hash")
 
             val out = ByteArray(20)
             (0 until 20).forEach {

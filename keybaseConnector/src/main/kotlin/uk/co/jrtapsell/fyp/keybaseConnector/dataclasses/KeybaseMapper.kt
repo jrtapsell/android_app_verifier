@@ -20,7 +20,9 @@ object KeybaseMapper: ObjectMapper {
     override fun <T : Any> readValue(value: String?, valueType: Class<T>): T? {
         if (value == null) return null
         val data = JSONObject(value)
-        val status = data.getJSONObject("status")!!
+        if (!data.has("status")) throw KeybaseException("Bad API response: $value")
+        val status = data.getJSONObject("status")
+        checkNotNull(status)
         if (status.getInt("code") == 205 && status.getString("name") == "NOT_FOUND") {
             return null
         }

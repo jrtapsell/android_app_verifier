@@ -47,10 +47,10 @@ data class Commit(
             
             val parents = parentHashes.split(" ")
                     .filter { it.isNotEmpty() }
-                    .map { Hash.fromString(it)!! }
+                    .map { Hash.fromString(it) }
 
             return Commit(
-                    Hash.fromString(commitHash)!!,
+                    Hash.fromString(commitHash),
                     parents,
                     subject,
                     author,

@@ -122,7 +122,8 @@ fun run(waitFor: Boolean, workingDir: String, command: List<String>): OutputSequ
     val process = ProcessBuilder()
         .directory(File(workingDir))
         .command(command)
-        .start()!!
+        .start()
+    checkNotNull(process)
     return OutputSequence(process, waitFor)
 }
 
@@ -140,6 +141,7 @@ fun run(waitFor: Boolean, workingDir: String, vararg command: String): OutputSeq
     val process = ProcessBuilder()
             .directory(File(workingDir))
             .command(command.toList())
-            .start()!!
+            .start()
+    checkNotNull(process)
     return OutputSequence(process, waitFor)
 }

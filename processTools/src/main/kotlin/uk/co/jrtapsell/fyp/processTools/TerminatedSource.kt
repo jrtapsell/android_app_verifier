@@ -3,16 +3,16 @@ package uk.co.jrtapsell.fyp.processTools
 import java.util.concurrent.LinkedBlockingDeque
 
 /** Iterator that can keep having stuff added to it until it is closed. */
-class TerminatedSource<T>(private val terminator: T): Iterator<T> {
+class TerminatedSource<T: Any>(private val terminator: T): Iterator<T> {
     private val backing = LinkedBlockingDeque<T>()
 
     private var _last: T? = null
 
     private val last: T get() {
             if (_last == null) {
-                _last = backing.take()!!
+                _last = backing.take()
             }
-            return _last!!
+            return checkNotNull(_last)
     }
 
     /** Seals the source, saying no new items will be added */

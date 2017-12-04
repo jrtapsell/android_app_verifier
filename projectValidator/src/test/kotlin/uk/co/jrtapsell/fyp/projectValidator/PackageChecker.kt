@@ -46,7 +46,7 @@ class PackageChecker {
     fun `Checks the package line of files is correct`() {
         val headerRegex = Regex("""package ([A-z]+(?:\.[A-z]+)+)""")
         File("../").walkChildren("kt", null, "src", null, "kotlin" ) { name, file ->
-            val header = file.bufferedReader().use { it.readLine() }!!
+            val header = file.bufferedReader().use { it.readLine() } ?: fail("File missing package")
             val match = headerRegex.matchEntire(header)?:throw AssertionError(header)
             val packageName = match.groupValues[1]
             val segments = packageName.split(".")
@@ -107,20 +107,14 @@ class PackageChecker {
         File("../").walkChildren("kt", null, "src", "test") { path, file ->
             val text = file.readText()
             testRegex.findAll(text).forEach {
-                val annotationParams = it.groups[1]?.value
-                val (targetRegex, nameGroup) = if (annotationParams?.contains("dataProvider") == true) {
-                    dataProvider to it.groups[2]
-                }
-                else {
-                    noDataProvider to it.groups[2]
-                }
-                val name = nameGroup!!.value
-                if (targetRegex.matchEntire(name) == null) {
+                val (_, testParams, testName) = it.groupValues
+                val targetRegex = if (testParams.contains("dataProvider")) dataProvider else noDataProvider
+                if (targetRegex.matchEntire(testName) == null) {
                     fail("""
-                            |Name of {$path | $name} is wrong:
+                            |Name of {$path | $testName} is wrong:
                             |Expected: ${targetRegex.pattern}
-                            |Actual  : $name
-                            |Based on: $annotationParams
+                            |Actual  : $testName
+                            |Based on: $testParams
                     """.trimMargin())
                 }
             }

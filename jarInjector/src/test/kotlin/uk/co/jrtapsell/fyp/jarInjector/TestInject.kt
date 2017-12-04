@@ -12,7 +12,7 @@ class TestInject {
         tempFile.delete()
         tempFile.mkdirs()
         try {
-            block({ tempFile.resolve(it).canonicalPath!! })
+            block({ tempFile.resolve(it).canonicalPath })
         } finally {
             tempFile.deleteRecursively()
         }

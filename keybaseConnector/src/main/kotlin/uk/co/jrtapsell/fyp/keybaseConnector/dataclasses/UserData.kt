@@ -1,6 +1,7 @@
 package uk.co.jrtapsell.fyp.keybaseConnector.dataclasses
 
 import org.json.JSONObject
+import uk.co.jrtapsell.fyp.keybaseConnector.KeybaseException
 import uk.co.jrtapsell.fyp.keybaseConnector.KeybaseVerifier
 
 /** Represents a Keybase user. */
@@ -8,9 +9,10 @@ data class UserData(val id: String, val usernames: Map<String, String>, val user
     companion object {
         /** Creates a user from their JSON representation. */
         fun create(them: JSONObject): UserData? {
-            val username = them.getJSONObject("basics").getString("username_cased")
+            val username = them.getJSONObject("basics")?.getString("username_cased") ?:
+                    throw KeybaseException("Bad data format: $them")
             val usenames = mutableMapOf(
-                    "keybase" to username!!
+                    "keybase" to username
             )
             them.getJSONObject("proofs_summary").getJSONArray("all").forEach {
                 it as JSONObject

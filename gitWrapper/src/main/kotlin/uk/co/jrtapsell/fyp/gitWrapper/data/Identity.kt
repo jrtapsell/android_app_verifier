@@ -1,5 +1,7 @@
 package uk.co.jrtapsell.fyp.gitWrapper.data
 
+import uk.co.jrtapsell.fyp.gitWrapper.GitException
+
 /** Represents a type of git identity. */
 open class Identity(
     val realName: String,
@@ -12,10 +14,8 @@ open class Identity(
         private val GPG_REGEX = Regex("""([^(]+?) *\(([^)]+)\) *<([^>]+)>""")
         /** Converts a string to its Identity representation. */
         fun fromGpgString(gpgString: String): Identity {
-            val v = GPG_REGEX.matchEntire(gpgString)!!
-            val real = v.groups[0]!!.value
-            val comment = v.groups[1]!!.value
-            val email = v.groups[2]!!.value
+            val v = GPG_REGEX.matchEntire(gpgString) ?: throw GitException("Bad Hash")
+            val (_, real, comment, email) = v.groupValues
             return Identity(real, email, comment)
         }
     }

@@ -57,8 +57,10 @@ fun assertAllEqual(vararg items: Any?) {
     }
 }
 
-fun Any?.fail(message: String) {
+/** Makes the test fail. */
+fun Any?.fail(message: String): Nothing {
     Assert.fail(message)
+    throw AssertionError(message) // Helps the compiler understand, never called
 }
 
 /** Checks a value is not null. */

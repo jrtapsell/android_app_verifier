@@ -4,7 +4,7 @@ import org.json.JSONObject
 import kotlin.reflect.KClass
 
 /** Exception for when something goes wrong while using Keybase. */
-abstract class KeybaseException(message: String? = null, throwable: Throwable? = null):
+open class KeybaseException(message: String? = null, throwable: Throwable? = null):
         RuntimeException(message, throwable) {
     companion object {
 
