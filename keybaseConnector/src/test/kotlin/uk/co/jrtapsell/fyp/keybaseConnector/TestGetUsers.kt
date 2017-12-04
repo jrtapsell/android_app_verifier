@@ -16,7 +16,7 @@ class TestGetUsers {
      */
     @Test
     fun `Checks test user's data is as expected`() {
-        val response = notNull(Keybase.getByUsername("jrtapsell"))
+        val response = Keybase.getByUsername("jrtapsell").notNull()
         response.usernames["keybase"] assertEquals "jrtapsell"
         response.usernames["twitter"] assertEquals "jrtapsell"
         response.usernames["github"] assertEquals "jrtapsell"
@@ -29,10 +29,10 @@ class TestGetUsers {
      */
     @Test
     fun `Checks different sites give equal users`() {
-        val keybase = notNull(Keybase.getByUsername("jrtapsell"))
-        val github = notNull(Keybase.getByGitHub("jrtapsell")).only()
-        val domain = notNull(Keybase.getByDomain("jrtapsell.co.uk")).only()
-        val website = notNull(Keybase.getByDomain("www.jrtapsell.co.uk")).only()
+        val keybase = Keybase.getByUsername("jrtapsell").notNull()
+        val github = Keybase.getByGitHub("jrtapsell").notNull().only()
+        val domain = Keybase.getByDomain("jrtapsell.co.uk").notNull().only()
+        val website = Keybase.getByDomain("www.jrtapsell.co.uk").notNull().only()
         assertAllEqual(keybase, github, domain, website)
     }
 

@@ -29,7 +29,7 @@ class TestProcessIO {
     /** Makes sure that the process does not exit early by using sleep to wait 1 second. */
     @Test
     fun `Checks it waits for the process if asked`() {
-        timeLimit(900, 1200) {
+        timeLimit(900, 1500) {
             val pro = run(true, "/", "sleep", "1")
             pro.use {}
         }
