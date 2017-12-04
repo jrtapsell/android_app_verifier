@@ -11,4 +11,5 @@ gpg --gen-key --batch setup.gpg
 
 fingerprint=$(gpg --fingerprint example@example.com | grep "=" | cut -d "=" -f 2 | tr -d ' ')
 
+echo Generated a key with fingerprint ${fingerprint}
 cd ..
