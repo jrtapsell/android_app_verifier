@@ -37,6 +37,8 @@ subprojects {
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
         testCompile group: 'org.testng', name: 'testng', version: '6.11'
+        compile project(":baseUtils")
+        testCompile project(':baseUtils').sourceSets.test.output
     }
 
 

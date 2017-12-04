@@ -1,10 +1,10 @@
 package uk.co.jrtapsell.fyp.keybaseConnector
 
-import org.testng.Assert
 import org.testng.annotations.Test
-import uk.co.jrtapsell.fyp.keybaseConnector.utils.assertAllEqual
-import uk.co.jrtapsell.fyp.keybaseConnector.utils.assertEquals
-import uk.co.jrtapsell.fyp.keybaseConnector.utils.only
+import uk.co.jrtapsell.fyp.baseUtils.NullUtils.notNull
+import uk.co.jrtapsell.fyp.baseUtils.IterableUtils.only
+import uk.co.jrtapsell.fyp.baseUtils.TestUtils.assertEquals
+import uk.co.jrtapsell.fyp.baseUtils.TestUtils.assertAllEqual
 
 /**
  * Tests getting users from keybase.
@@ -12,14 +12,6 @@ import uk.co.jrtapsell.fyp.keybaseConnector.utils.only
  * @author James Tapsell
  */
 class TestGetUsers {
-
-    private fun <T> notNull(value: T?): T {
-        if (value == null) {
-            Assert.fail("Value is null")
-        } else {
-            return value
-        }
-    }
 
     /**
      * Gets my user from keybase, and then validates known facts about me.
