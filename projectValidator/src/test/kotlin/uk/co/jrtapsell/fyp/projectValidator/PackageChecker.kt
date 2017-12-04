@@ -1,7 +1,7 @@
 package uk.co.jrtapsell.fyp.projectValidator
 
-import org.testng.Assert
 import org.testng.annotations.Test
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.fail
 import java.io.File
 
 /** Validates the project. */
@@ -116,7 +116,7 @@ class PackageChecker {
                 }
                 val name = nameGroup!!.value
                 if (targetRegex.matchEntire(name) == null) {
-                    Assert.fail("""
+                    fail("""
                             |Name of {$path | $name} is wrong:
                             |Expected: ${targetRegex.pattern}
                             |Actual  : $name

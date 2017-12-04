@@ -1,7 +1,8 @@
 package uk.co.jrtapsell.fyp.processTools
 
-import org.testng.Assert
 import org.testng.annotations.Test
+
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
 
 /** A sequence of items, which is terminated with a set value. */
 class TestTerminatedSource {
@@ -11,9 +12,9 @@ class TestTerminatedSource {
     fun `Tests a simple insertion and seal`() {
         val source = TerminatedSource("TERMINATOR")
         source.push("Test 1")
-        Assert.assertTrue(source.hasNext())
-        Assert.assertEquals(source.next(), "Test 1")
+        source.hasNext().assertTrue("Pushed value was not returned")
+        source.next() assertEquals "Test 1"
         source.seal()
-        Assert.assertFalse(source.hasNext())
+        source.hasNext().assertFalse()
     }
 }

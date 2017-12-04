@@ -1,10 +1,8 @@
 package uk.co.jrtapsell.fyp.keybaseConnector
 
 import org.testng.annotations.Test
-import uk.co.jrtapsell.fyp.baseUtils.NullUtils.notNull
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
 import uk.co.jrtapsell.fyp.baseUtils.IterableUtils.only
-import uk.co.jrtapsell.fyp.baseUtils.TestUtils.assertEquals
-import uk.co.jrtapsell.fyp.baseUtils.TestUtils.assertAllEqual
 
 /**
  * Tests getting users from keybase.

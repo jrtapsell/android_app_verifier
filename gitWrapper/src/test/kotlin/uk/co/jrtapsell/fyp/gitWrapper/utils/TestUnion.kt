@@ -1,7 +1,8 @@
 package uk.co.jrtapsell.fyp.gitWrapper.utils
 
-import org.testng.Assert
 import org.testng.annotations.Test
+
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
 
 /**
  * @author James Tapsell
@@ -17,14 +18,15 @@ class TestUnion {
     /** Creates various different unions and checks them. */
     @Test
     fun `Creates and checks simple unions`() {
-        Assert.assertTrue(first.hasPrimary())
-        Assert.assertTrue(second.hasPrimary())
-        Assert.assertFalse(noVal.hasPrimary())
-        Assert.assertEquals(first, second)
-        Assert.assertNotEquals(first, noVal)
+        first.hasPrimary().assertTrue()
+        second.hasPrimary().assertTrue()
+        noVal.hasPrimary().assertFalse()
+        first assertEquals second
+        first assertNotEquals noVal
 
-        Assert.assertEquals(first.getPrimary(), "A")
-        Assert.assertEquals(noVal.getSecondary(), 1)
+        assertAllEqual(first.getPrimary(), second.getPrimary(), "A")
+
+        noVal.getSecondary() assertEquals 1
     }
 
     /** Validates getSecondary. */

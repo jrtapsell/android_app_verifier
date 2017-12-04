@@ -1,0 +1,5 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Base Utils">
+    <!-- Testing the test methods would require an extra test module, which itself would need tests. -->
+</suite>

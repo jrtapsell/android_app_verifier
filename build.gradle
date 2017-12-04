@@ -37,8 +37,6 @@ subprojects {
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
         testCompile group: 'org.testng', name: 'testng', version: '6.11'
-        compile project(":baseUtils")
-        testCompile project(':baseUtils').sourceSets.test.output
     }
 
 
@@ -59,5 +57,12 @@ subprojects {
             xml.enabled = true // coveralls plugin depends on xml format report
             html.enabled = true
         }
+    }
+}
+
+configure(subprojects - project(":baseUtils")) {
+    dependencies {
+        compile project(":baseUtils")
+        testCompile project(':baseUtils').sourceSets.test.output
     }
 }

@@ -1,8 +1,10 @@
 package uk.co.jrtapsell.fyp.gpgWrapper
 
-import org.testng.Assert
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
+
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
+
 import java.io.File
 
 /** Utility method to get the contents of a resource file. */
@@ -39,7 +41,7 @@ class TestGpgWrapper {
         val message = getResource(test.messagePath)
         val signature = getResource(test.sigPath)
         val sigState = GpgWrapper.validate(message, signature)
-        Assert.assertEquals(sigState, test.signatureStatus)
+        sigState assertEquals  test.signatureStatus
     }
 
     /** Attempts to sign a message, and then uses the validator to make sure the returned
@@ -49,6 +51,6 @@ class TestGpgWrapper {
     fun `Tries to sign a message, and checks it is signed`() {
         val helloWorld = "Hello World"
         val signature = GpgWrapper.sign(helloWorld)
-        Assert.assertTrue(GpgWrapper.validate(helloWorld, signature).valid)
+        GpgWrapper.validate(helloWorld, signature).valid.assertTrue()
     }
 }

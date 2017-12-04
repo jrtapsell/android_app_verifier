@@ -1,8 +1,9 @@
 package uk.co.jrtapsell.fyp.jarInjector
 
-import org.testng.Assert.*
 import org.testng.annotations.Test
 import java.io.File
+
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
 
 /** Tests injecting into a JAR file. */
 class TestInject {
@@ -22,10 +23,10 @@ class TestInject {
     fun `Signs an unsigned jar`() {
         withTempDir { tempDir ->
             val unsigned = JarManipulator("../demoJars/unsigned.jar")
-            assertTrue(unsigned.info.getTotalSigners().isEmpty())
+            unsigned.info.getTotalSigners().isEmpty().assertTrue()
             val signedPath = tempDir("signed.jar")
             val signed = unsigned.sign(signedPath)
-            assertTrue(signed.info.getTotalSigners().isNotEmpty())
+            signed.info.getTotalSigners().isNotEmpty().assertTrue("Should be signed")
         }
     }
 
@@ -34,10 +35,10 @@ class TestInject {
     fun `Unsigns a signed jar`() {
         withTempDir { tempDir ->
             val signed = JarManipulator("../demoJars/sqljdbc42.jar")
-            assertTrue(signed.info.getTotalSigners().isNotEmpty())
+            signed.info.getTotalSigners().isNotEmpty().assertTrue()
             val signedPath = tempDir("unsigned.jar")
             val unsigned = signed.unsign(signedPath)
-            assertTrue(unsigned.info.getTotalSigners().isEmpty())
+            unsigned.info.getTotalSigners().isEmpty().assertTrue()
         }
     }
 
@@ -58,7 +59,7 @@ class TestInject {
                     "Hello World")
             val injectedNames = injected.list()
             filenames.add("demo.txt")
-            assertEquals(injectedNames, filenames)
+            injectedNames assertEquals filenames
         }
     }
 

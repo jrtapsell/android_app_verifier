@@ -1,8 +1,9 @@
 package uk.co.jrtapsell.fyp.processTools
 
-import org.testng.Assert
 import org.testng.annotations.Test
 import java.io.File
+
+import uk.co.jrtapsell.fyp.baseUtils.testUtils.*
 
 /** Using https://www.tengio.com/blog/more-readable-tests-with-kotlin/ */
 class TestProcessIO {
@@ -12,8 +13,8 @@ class TestProcessIO {
         block.invoke()
         val end = System.currentTimeMillis()
         val delta = end - start
-        Assert.assertTrue(delta >= minimumMS, "Block took too little time $delta")
-        Assert.assertTrue(delta <= maximumMS, "Block took too much time $delta")
+        (delta >= minimumMS).assertTrue("Block took too little time $delta")
+        (delta <= maximumMS).assertTrue("Block took too much time $delta")
     }
 
     /** Tests that the output works by using ls. */
@@ -22,7 +23,7 @@ class TestProcessIO {
         val lines = mutableListOf<Line>()
         val run = run(true, "/", "ls")
         run.use { it.forEach { lines.add(it) } }
-        Assert.assertNotEquals(lines.size, 0, "No items")
+        lines.size assertNotEquals 0
     }
 
     /** Makes sure that the process does not exit early by using sleep to wait 1 second. */
@@ -55,7 +56,7 @@ class TestProcessIO {
                 "1")
         pro.use{}
 
-        Assert.assertEquals(pro.exitCode, 1, "Wrong exit code")
+        pro.exitCode assertEquals  1
     }
 
     /** Uses cat to test that both input and output work as expected. */
@@ -65,7 +66,7 @@ class TestProcessIO {
         pro.inputLine("Hello World")
         pro.closeInput()
         val output = pro.map { it.text }.toList()
-        Assert.assertEquals(output, listOf("Hello World"))
+        output assertEquals listOf("Hello World")
     }
 
     /** Fakes a bad exit code and checks that it is handled appropriately. */
