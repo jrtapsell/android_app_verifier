@@ -11,6 +11,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
+import kotlin.properties.Delegates
 
 /** Wraps Bouncy Castle to verify that a Keybase user signed a given message. */
 data class KeybaseVerifier(val username: String) {
@@ -41,8 +42,8 @@ data class KeybaseVerifier(val username: String) {
 
 /** A #KeyringConfig that trusts the keys listed for a given keybase user. */
 data class KeybaseConfig(val username: String): KeyringConfig {
-    private lateinit var decoded: PGPPublicKeyRingCollection
-    private lateinit var keyFingerprints: List<String>
+    private var decoded: PGPPublicKeyRingCollection by Delegates.notNull()
+    private var keyFingerprints: List<String> by Delegates.notNull()
 
     init {
         URL("https://keybase.io/$username/pgp_keys.asc").openConnection().let { connection ->
