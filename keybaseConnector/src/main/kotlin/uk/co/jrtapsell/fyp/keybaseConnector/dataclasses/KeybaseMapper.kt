@@ -6,6 +6,7 @@ import org.json.JSONArray
 import uk.co.jrtapsell.fyp.keybaseConnector.extensions.isA
 import org.json.JSONObject
 import uk.co.jrtapsell.fyp.keybaseConnector.KeybaseException
+import uk.co.jrtapsell.fyp.keybaseConnector.extensions.applyEach
 
 /** Allows Unirest to return my objects instead of JSONObjects. */
 object KeybaseMapper: ObjectMapper {
@@ -36,7 +37,9 @@ object KeybaseMapper: ObjectMapper {
             valueType isA UsersData::class -> {
                 if (!data.has("them")) return null
                 val them = data.getJSONArray("them") ?: return null
-                UsersData((0 until them.length()).mapNotNull { UserData.create(them.getJSONObject(it)) })
+                val users = them.applyEach { getJSONObject(it) }
+                    .mapNotNull { UserData.create(it) }
+                UsersData(users)
             }
             else -> throw AssertionError("Unknown type: ${valueType.canonicalName}")
         }?.unsafeCast(valueType)
