@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="GPG Wrapper">
+<suite name="Gpg Wrapper">
 
     <test name="Test">
         <classes>

@@ -1,4 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Demo Jar">
+    <!-- Test for hello world would be excessive. -->
 </suite>

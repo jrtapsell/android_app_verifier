@@ -4,7 +4,7 @@
 
     <test name="Check project">
         <classes>
-            <class name="uk.co.jrtapsell.fyp.projectValidator.PackageChecker"/>
+            <class name="uk.co.jrtapsell.fyp.projectValidator.LayoutValidator"/>
         </classes>
     </test>
 
