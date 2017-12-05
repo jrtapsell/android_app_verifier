@@ -15,7 +15,7 @@ object KeybaseMapper: ObjectMapper {
     override fun writeValue(value: Any?) = throw AssertionError()
 
     @Suppress("UNCHECKED_CAST")
-    private inline fun <T> Any.unsafeCast(type: Class<T>) = this as T
+    private inline fun <T> Any.unsafeCast(type: Class<T>) = type.cast(this)
 
     /** Reads an object from a string. */
     override fun <T : Any> readValue(value: String?, valueType: Class<T>): T? {

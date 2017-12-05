@@ -71,8 +71,7 @@ class JarInfo(private val filePath: String) {
             it.second
                 .forEach {
                 val certChain = it.signerCertPath.certificates
-                    .filter { it is X509Certificate }
-                    .map { it as X509Certificate }
+                    .mapNotNull { it as? X509Certificate }
                 val head = certChain[0].hexify()
                 certs[head] = certChain
             }
