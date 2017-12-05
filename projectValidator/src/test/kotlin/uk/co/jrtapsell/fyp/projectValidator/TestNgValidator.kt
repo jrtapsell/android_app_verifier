@@ -41,22 +41,22 @@ class TestNgValidator {
     }
 
     /** Gets an attribute of the given node. */
-    private fun Node.attr(s: String): String {
+    fun Node.attr(s: String): String {
         return checkNotNull(this.attributes.toMap().get(s))
     }
 
     /** Gets the type of the given node, or fails if unknown */
-    private fun Node.classify() = NodeType.classify(this)
+    fun Node.classify() = NodeType.classify(this)
 
     /** Gets the children of this node in a list to allow Kotlin methods. */
-    private fun Element.children() = childNodes?.children() ?: listOf()
+    fun Element.children() = childNodes?.children() ?: listOf()
 
     /** Converts a nodeList to a List. */
-    private fun NodeList.children() = (0 until length).map { item(it) }
+    fun NodeList.children() = (0 until length).map { item(it) }
         .filter { it.hasChildNodes() || !it.textContent.trim().isBlank()}
 
     /** Gets all of the attributes of the given node as a map. */
-    private fun NamedNodeMap?.toMap(): Map<String, String> {
+    fun NamedNodeMap?.toMap(): Map<String, String> {
         if (this == null) return mapOf()
         return (0 until length).associate {
             val node = item(it)
@@ -65,7 +65,7 @@ class TestNgValidator {
     }
 
     /** The expected node types in a testng.xml file. */
-    private enum class NodeType(val nodeName: String) {
+    enum class NodeType(val nodeName: String) {
         /** An XML comment. */
         COMMENT("#comment"),
         /** A suite declaration. */
