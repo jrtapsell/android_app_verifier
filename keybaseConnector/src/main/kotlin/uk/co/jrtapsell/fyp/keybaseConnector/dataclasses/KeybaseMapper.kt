@@ -36,7 +36,7 @@ object KeybaseMapper: ObjectMapper {
             valueType isA UsersData::class -> {
                 if (!data.has("them")) return null
                 val them = data.getJSONArray("them") ?: return null
-                UsersData(them.mapNotNull { UserData.create(it as JSONObject) })
+                UsersData((0 until them.length()).mapNotNull { UserData.create(them.getJSONObject(it)) })
             }
             else -> throw AssertionError("Unknown type: ${valueType.canonicalName}")
         }?.unsafeCast(valueType)
