@@ -10,11 +10,12 @@ import uk.co.jrtapsell.fyp.baseUtils.Cases
 import uk.co.jrtapsell.fyp.baseUtils.testUtils.assertEquals
 import javax.xml.parsers.DocumentBuilderFactory
 
+/** Validate the testng.xml files. */
 class TestNgValidator {
-    val DOCUMENT_BUILDER = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    private val DOCUMENT_BUILDER = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
     @DataProvider(name = "configs")
-    fun configProvider(): Array<Array<Any>> {
+    private fun configProvider(): Array<Array<Any>> {
         val items = mutableListOf<List<Any>>()
         forEachProject { item ->
             val testFile = item.resolve("src")
@@ -30,24 +31,32 @@ class TestNgValidator {
         return items.map { it.toTypedArray() }.toTypedArray()
     }
 
+    /** Checks that all of the suite names are the upper sentence form of their module name. */
     @Test(dataProvider = "configs")
     fun `Validates the suite names`(config: Element, projectName: String) {
         config.classify() assertEquals NodeType.SUITE
         val name = config.attr("name")
-        Cases.convert(Cases.UPPER_SENTANCE, Cases.CAMEL, name) assertEquals projectName
-        Cases.convert(Cases.CAMEL, Cases.UPPER_SENTANCE, projectName) assertEquals name
+        Cases.convert(Cases.UPPER_SENTENCE, Cases.CAMEL, name) assertEquals projectName
+        Cases.convert(Cases.CAMEL, Cases.UPPER_SENTENCE, projectName) assertEquals name
     }
 
-    fun Node.attr(s: String): String {
+    /** Gets an attribute of the given node. */
+    private fun Node.attr(s: String): String {
         return checkNotNull(this.attributes.toMap().get(s))
     }
 
-    fun Node.classify() = NodeType.classify(this)
-    fun Element.children() = childNodes?.children() ?: listOf()
-    fun NodeList.children() = (0 until length).map { item(it) }
+    /** Gets the type of the given node, or fails if unknown */
+    private fun Node.classify() = NodeType.classify(this)
+
+    /** Gets the children of this node in a list to allow Kotlin methods. */
+    private fun Element.children() = childNodes?.children() ?: listOf()
+
+    /** Converts a nodeList to a List. */
+    private fun NodeList.children() = (0 until length).map { item(it) }
         .filter { it.hasChildNodes() || !it.textContent.trim().isBlank()}
 
-    fun NamedNodeMap?.toMap(): Map<String, String> {
+    /** Gets all of the attributes of the given node as a map. */
+    private fun NamedNodeMap?.toMap(): Map<String, String> {
         if (this == null) return mapOf()
         return (0 until length).associate {
             val node = item(it)
@@ -55,12 +64,17 @@ class TestNgValidator {
         }
     }
 
-    enum class NodeType(val nodeName: String) {
+    /** The expected node types in a testng.xml file. */
+    private enum class NodeType(val nodeName: String) {
+        /** An XML comment. */
         COMMENT("#comment"),
+        /** A suite declaration. */
         SUITE("suite"),
+        /** A test declaration. */
         TEST("test");
 
         companion object {
+            /** Classifies the given node into one of the expected types, or fails. */
             fun classify(element: Node) =
                 values().firstOrNull { it.nodeName == element.nodeName } ?:
                         throw AssertionError("Unknown type: ${element.nodeName}")
