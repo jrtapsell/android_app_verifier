@@ -33,7 +33,7 @@ data class KeybaseVerifier(val username: String) {
                 }
                 temp = sig
             }
-        } catch (ex: Throwable) {
+        } catch (ex: Exception) {
             KeybaseException.rethrow(ex)
         }
     }

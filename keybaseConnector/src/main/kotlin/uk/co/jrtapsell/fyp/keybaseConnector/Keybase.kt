@@ -1,6 +1,7 @@
 package uk.co.jrtapsell.fyp.keybaseConnector
 
 import com.mashape.unirest.http.Unirest
+import com.mashape.unirest.http.exceptions.UnirestException
 import uk.co.jrtapsell.fyp.keybaseConnector.dataclasses.KeybaseMapper
 import uk.co.jrtapsell.fyp.keybaseConnector.dataclasses.UserData
 import uk.co.jrtapsell.fyp.keybaseConnector.dataclasses.UsersData
@@ -24,7 +25,7 @@ object Keybase {
                 .queryString("fields", fields)
                 .asObject(T::class.java)
                 .body
-        } catch (ex: Throwable) {
+        } catch (ex: UnirestException) {
             KeybaseException.rethrow(ex)
         }
     }
