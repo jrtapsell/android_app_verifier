@@ -24,6 +24,9 @@ class TerminatedSource<T: Any>(private val terminator: T): Iterator<T> {
     /** Gets the next value from the source. */
     override fun next(): T {
         val line = last
+        if (line == terminator) {
+            throw NoSuchElementException("End of source reached")
+        }
         _last = null
         return line
     }
