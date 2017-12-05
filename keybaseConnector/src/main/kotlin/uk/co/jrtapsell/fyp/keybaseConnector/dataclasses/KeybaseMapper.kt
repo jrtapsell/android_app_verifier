@@ -14,7 +14,7 @@ object KeybaseMapper: ObjectMapper {
     override fun writeValue(value: Any?) = throw AssertionError()
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> Any.unsafeCast(type: Class<T>) = this as T
+    private inline fun <T> Any.unsafeCast(type: Class<T>) = this as T
 
     /** Reads an object from a string. */
     override fun <T : Any> readValue(value: String?, valueType: Class<T>): T? {
@@ -30,12 +30,12 @@ object KeybaseMapper: ObjectMapper {
         return when {
             valueType isA UserData::class -> {
                 if (!data.has("them")) return null
-                val them = data.get("them") as? JSONObject ?: return null
+                val them = data.getJSONObject("them") ?: return null
                 UserData.create(them)
             }
             valueType isA UsersData::class -> {
                 if (!data.has("them")) return null
-                val them = data.get("them") as? JSONArray ?: return null
+                val them = data.getJSONArray("them") ?: return null
                 UsersData(them.mapNotNull { UserData.create(it as JSONObject) })
             }
             else -> throw AssertionError("Unknown type: ${valueType.canonicalName}")
