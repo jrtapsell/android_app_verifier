@@ -2,6 +2,7 @@ package uk.co.jrtapsell.fyp.keybaseConnector
 
 import org.json.JSONObject
 import kotlin.reflect.KClass
+import kotlin.reflect.full.cast
 
 /** Exception for when something goes wrong while using Keybase. */
 open class KeybaseException(message: String? = null, throwable: Throwable? = null):
@@ -18,7 +19,7 @@ open class KeybaseException(message: String? = null, throwable: Throwable? = nul
         @Suppress("UNCHECKED_CAST")
         fun <T: Any> transativeCause(throwable: Throwable, kClass: KClass<T>): T? {
             if (kClass.isInstance(throwable)) {
-                return throwable as T
+                return kClass.cast(throwable)
             }
             return throwable.cause?.let { transativeCause(it, kClass) }
         }
