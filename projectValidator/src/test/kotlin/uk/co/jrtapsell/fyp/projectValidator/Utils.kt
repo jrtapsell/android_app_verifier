@@ -27,8 +27,9 @@ fun File.walkChildren(extension: String?, vararg specification: String?, block:(
 
 /** Iterates over each project in the repository. */
 fun forEachProject(block: (File) -> Unit) {
-    File("../").walkChildren("gradle", null) { _, file ->
-        if (file.name != "build.gradle") return@walkChildren
+    fun forEachGradleFile(file: File) {
+        if (file.name != "build.gradle") return
         block(file.parentFile)
     }
+    File("../").walkChildren("gradle", null) { _, file -> forEachGradleFile(file)}
 }
