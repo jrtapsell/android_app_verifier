@@ -40,6 +40,7 @@ data class KeybaseVerifier(val username: String) {
             if (cause is PGPException) {
                 KeybaseException.rethrow(cause)
             }
+            throw ex
         }
     }
 }
