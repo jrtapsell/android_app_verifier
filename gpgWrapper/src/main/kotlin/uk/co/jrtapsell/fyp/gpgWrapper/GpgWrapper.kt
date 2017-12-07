@@ -79,7 +79,7 @@ object GpgWrapper {
                 System.getenv("JRT_GPG_PASSWORD")?:"UNSET",
                 "--armor",
                 "-s")
-        val process = run(true, "/", *command)
+        val process = run(true, "/", command.asList())
         message.lines().forEach {
             process.inputLine(it)
         }

@@ -48,7 +48,7 @@ class JarManipulator(private val filename: String) {
     /** Signs the jar and stores the output at the given location. */
     fun sign(outputJarfile: String): JarManipulator {
 
-        val parts = arrayOf(
+        val parts = listOf(
                 "jarsigner",
                 "-keystore",
                 "../keys/mock",
@@ -61,7 +61,7 @@ class JarManipulator(private val filename: String) {
                 filename,
                 "mock"
         )
-        val process = run(true, "./", *parts)
+        val process = run(true, "./", parts)
         process.use {  }
         process.assertClosedCleanly()
         return JarManipulator(outputJarfile)

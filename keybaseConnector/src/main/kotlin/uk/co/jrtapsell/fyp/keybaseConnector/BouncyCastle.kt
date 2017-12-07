@@ -2,6 +2,7 @@ package uk.co.jrtapsell.fyp.keybaseConnector
 
 import name.neuhalfen.projects.crypto.bouncycastle.openpgp.BouncyGPG
 import name.neuhalfen.projects.crypto.bouncycastle.openpgp.keys.keyrings.KeyringConfig
+import org.bouncycastle.openpgp.PGPException
 import org.bouncycastle.openpgp.PGPPublicKeyRingCollection
 import org.bouncycastle.openpgp.PGPUtil
 import org.bouncycastle.openpgp.jcajce.JcaPGPPublicKeyRingCollection
@@ -34,8 +35,11 @@ data class KeybaseVerifier(val username: String) {
                 }
                 temp = sig
             }
-        } catch (ex: Exception) {
-            KeybaseException.rethrow(ex)
+        } catch (ex: IOException) {
+            val cause = ex.cause
+            if (cause is PGPException) {
+                KeybaseException.rethrow(cause)
+            }
         }
     }
 }
